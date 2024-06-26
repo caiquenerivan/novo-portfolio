@@ -18,11 +18,32 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false);
 
+  const Menus = [
+    { title: "Home", src: FaHome, portuguese: false },
+    { title: "Página Inicial", src: FaHome, portuguese: true},
+    { title: "About", src: FaPerson, portuguese: false  },
+    { title: "Sobre Mim", src: FaPerson , portuguese: true},
+    { title: "Portfolio", src: FaCode, portuguese: false  },
+    { title: "Portfolio", src: FaCode , portuguese: true},
+    { title: "Contact", src: FaAt, portuguese: false  },
+    { title: "Contato", src: FaAt, portuguese: true},
+    { title: "Hobbies", src: FaGuitar, portuguese: false, gap: true},
+    { title: "Hobbies", src: FaGuitar, portuguese: true, gap: true},
+  ];
+
+  const menuPt = Menus.filter(function(Menus){
+    return Menus.portuguese == true;
+  })
+
+  const menuEn = Menus.filter(function(Menus){
+    return Menus.portuguese == false;
+  })
+
   return (
-    <div className="fixed">
+    <div className="fixed sm:static">
       <div
         className={`${
-          open ? "w-80" : "w-10"
+          open ? "w-80" : "w-2/6 min-w-10"
         } duration-300 h-screen bg-gray-800 relative justify-center flex-col `}
       >
         <div
@@ -55,14 +76,14 @@ export default function Sidebar() {
           <h2
             className={`${
               isPortuguese ? "" : "hidden"
-            } font-normal text-stone-300 text-xl`}
+            } font-normal text-stone-300 text-3xl text-center`}
           >
             Desenvolvedor Full Stack
           </h2>
           <h2
             className={`${
               isPortuguese ? "hidden" : ""
-            } font-normal text-stone-300 text-xl`}
+            } font-normal text-stone-300 text-3xl`}
           >
             Full Stack Developer
           </h2>
@@ -74,86 +95,37 @@ export default function Sidebar() {
         >
           <div className="py-10 text-stone-300 uppercase items-center text-2xl w-full">
             <ul className="items-center justify-center text-center w-full border-y-2 border-solid border-gray-700">
-              <li
-                className={`${
-                  isPortuguese ? "hidden" : ""
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#" className="flex items-center justify-center">
-                  <FaHome />
-                  <p className="px-2">Home</p>
-                </a>
-              </li>
-
-              <li
-                className={`${
-                  isPortuguese ? "" : "hidden"
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#" className="flex items-center justify-center">
-                  <FaHome />
-                  <p className="px-2">Página Inicial</p>
-                </a>
-              </li>
-
-              <li
-                className={`${
-                  isPortuguese ? "hidden" : ""
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#about" className="flex items-center justify-center">
-                  <FaPerson />
-                  <p className="px-2">About</p>
-                </a>
-              </li>
-
-              <li
-                className={`${
-                  isPortuguese ? "" : "hidden"
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#about" className="flex items-center justify-center">
-                  <FaPerson />
-                  <p className="px-2">Sobre Mim</p>
-                </a>
-              </li>
-
-              <li className="py-2 border-y-2 border-solid border-gray-700">
-                <a
-                  href="#portfolio"
-                  className="flex items-center justify-center"
+              
+              {menuPt.map((Menu, index)=>(
+                <li
+                  key={index}
+                  className={`${
+                    isPortuguese ? "" : "hidden"
+                  } py-2 border-y-2 border-solid border-gray-700`}
                 >
-                  <FaCode />
-                  <p className="px-2">Portfolio</p>
-                </a>
-              </li>
-              <li
-                className={`${
-                  isPortuguese ? "hidden" : ""
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#contact" className="flex items-center justify-center">
-                  <FaAt />
-                  <p className="px-2">Contact</p>
-                </a>
-              </li>
-              <li
-                className={`${
-                  isPortuguese ? "" : "hidden"
-                } py-2 border-y-2 border-solid border-gray-700`}
-              >
-                <a href="#contact" className="flex items-center justify-center">
-                  <FaAt />
-                  <p className="px-2">Contato</p>
-                </a>
-              </li>
+                  <a href="#" className="flex items-center justify-center">
+                    
+                    <p className="px-2">{Menu.title}</p>
+                  </a>
+                </li>
 
-              <li className="py-2 border-y-2 border-solid border-gray-700">
-                <a href="#hobbies" className="flex items-center justify-center">
-                  <FaGuitar />
-                  <p className="px-2">Hobbies</p>
-                </a>
-              </li>
+              ))}
+
+              {menuEn.map((Menu, index)=>(
+                <li
+                  key={index}
+                  className={`${
+                    isPortuguese ? "hidden" : ""
+                  } py-2 border-y-2 border-solid border-gray-700`}
+                >
+                  <a href="#" className="flex items-center justify-center">
+                    
+                    <p className="px-2">{Menu.title}</p>
+                  </a>
+                </li>
+
+              ))}
+
             </ul>
           </div>
 

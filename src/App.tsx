@@ -5,8 +5,12 @@ function App() {
 
 
   return (
-    <div className='bg-gray-700 h-screen m-0 flex relative'>
+    <div className='bg-gray-700 h-screen m-0 flex'>
       <Sidebar/>
+      <div>
+        HOAOAOO
+      </div>
+
     </div>
   )
 }
