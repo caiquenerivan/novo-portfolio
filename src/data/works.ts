@@ -162,6 +162,23 @@ const works: Work[] = ([
             colorName: "teal-500"
         }
     },
+    
+    {
+        titlePt: "Meu Decimo Projeto Incrível",
+        titleEn: "My Tenth Incredible Project",
+        descriptionPt: "Este é um projeto interessante que fiz usando várias tecnologias.",
+        descriptionEn: "This is an interesting project I worked on using various technologies.",
+        photo: "link_para_foto.jpg",
+        linkGitHub: "https://github.com/usuario/projeto",
+        linkProject: "",
+        skills: ["React Native", "React", "CSS"],
+        colorName: "teal-500",
+        mainLanguage: {
+            name: "React Native",
+            colorHexa: "#14b8a6",
+            colorName: "teal-500"
+        }
+    },
 ]);
 
 export default works;

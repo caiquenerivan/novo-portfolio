@@ -14,6 +14,8 @@ const Tags = ({
     fecharH2: "</h2>",
     abrirSection: "<section>",
     fecharSection: "</section>",
+    abrirForm: "<form>",
+    fecharForm: "</form>",
 });
 
 export default Tags;

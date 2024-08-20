@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { MdClose, MdMenu, MdToggleOff, MdToggleOn } from "react-icons/md";
 import brasil from "../../assets/imgs/brasil.png";
 import gbr from "../../assets/imgs/gbr.png";
@@ -63,7 +63,7 @@ export default function Sidebar() {
       <div
         className={`${
           open ? "w-80" : "w-2/6 min-w-10"
-        } duration-300 h-screen bg-gray-800 relative justify-center flex-col fixed`}
+        } duration-300 h-screen bg-gray-800 relative justify-center flex-col`}
       >
         <div
           className={`m-5 w-10 h-10 bg-gray-700 border-solid border-4 ${
@@ -124,6 +124,7 @@ export default function Sidebar() {
                   <Link
                     to={`/${Menu.linkTo}`}
                     className="flex items-center justify-center"
+                    onClick={() => setOpen(!open)}
                   >
                     <Menu.src />
                     <p className="px-2">{Menu.title}</p>
