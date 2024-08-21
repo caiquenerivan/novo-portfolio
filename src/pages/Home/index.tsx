@@ -9,7 +9,9 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen w-full pl-16 justify-center max-w-screen-3xl">
       <Tag>{Tags.abrirHTML}</Tag>
-      <Tag>{Tags.abrirBody}</Tag>
+      <div className="px-4">
+        <Tag>{Tags.abrirBody}</Tag>
+      </div>
       <div className="flex flex-col px-8 py-4">
         <Tag>{Tags.abrirH1}</Tag>
         <div className="flex flex-col w-full px-4">

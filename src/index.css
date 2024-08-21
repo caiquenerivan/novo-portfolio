@@ -42,6 +42,9 @@
   background-color: #18212c50;
 }
 
-.neon {
+.neon-teal {
   text-shadow: 1px 1px 2px #14b8a675, 0 0 1em #14b8a675, 0 0 0.2em #14b8a675;
+}
+.neon-red {
+  text-shadow: 1px 1px 2px #dc2626, 0 0 1em #dc2626, 0 0 0.2em #dc2626;
 }
