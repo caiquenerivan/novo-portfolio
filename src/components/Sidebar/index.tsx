@@ -59,7 +59,7 @@ export default function Sidebar() {
   });
 
   return (
-    <div className="fixed h-screen 3xl:static ">
+    <div className="fixed h-screen 3xl:static z-50">
       <div
         className={`${
           open ? "w-80" : "w-2/6 min-w-10"

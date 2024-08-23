@@ -27,7 +27,7 @@ export const Categories = [
     },
   ] as CategoriesHobbies[];
 
-interface Hobbies {
+export interface Hobbies {
     titlePt: string,
     titleEn: string,
     descPt: string,
@@ -188,8 +188,8 @@ export const HobbiesPost = [
         titleEn: 'SOS',
         descPt: 'Álbum de 2022 de R&B',
         descEn: 'R&B album from 2022',
-        mainArtist: 'Kendrick Lamar',
-        imageUrl: 'https://i.pinimg.com/564x/68/b2/be/68b2be79042b3bd6a897541f90e2a2b8.jpg',
+        mainArtist: 'SZA',
+        imageUrl: 'https://i.pinimg.com/736x/7f/fb/06/7ffb0659c0e4608670f4022515cd7ba5.jpg',
         categorie: Categories.find(category => category.tag === 'music') as CategoriesHobbies,
         year: 2022,
         spotify: 'https://open.spotify.com/album/07w0rG5TETcyihsEIZR3qG?autoplay=true',
@@ -202,14 +202,45 @@ export const HobbiesPost = [
         titleEn: 'Inglorious Bastards',
         descPt: 'Filme de 2009 que se passa durante a segunda guerra mundial.',
         descEn: '2019 film set during World War II.',
-        mainArtist: '',
-        imageUrl: 'https://i.pinimg.com/564x/68/b2/be/68b2be79042b3bd6a897541f90e2a2b8.jpg',
-        categorie: Categories.find(category => category.tag === 'music') as CategoriesHobbies,
-        year: 2022,
-        spotify: 'https://open.spotify.com/album/07w0rG5TETcyihsEIZR3qG?autoplay=true',
-        youtube:'https://music.youtube.com/playlist?list=OLAK5uy_mOMo8Ji8_xez5ZZPXnfxqGd_DGi03107c&feature=gws_kp_album&feature=gws_kp_artist',
-        deezer: 'https://www.deezer.com/album/383703577',
-        genre: 'r&b'
+        mainArtist: 'Quentin Tarantino',
+        imageUrl: 'https://i.pinimg.com/564x/88/1d/87/881d87e9fa672b894170d01e48cced34.jpg',
+        categorie: Categories.find(category => category.tag === 'movies') as CategoriesHobbies,
+        year: 2009,
+        spotify: '',
+        youtube:'',
+        deezer: '',
+        genre: 'War'
+    },
+
+    
+    {
+        titlePt: 'Bastardos Inglórios',
+        titleEn: 'Inglorious Bastards',
+        descPt: 'Filme de 2009 que se passa durante a segunda guerra mundial.',
+        descEn: '2019 film set during World War II.',
+        mainArtist: 'Quentin Tarantino',
+        imageUrl: '',
+        categorie: Categories.find(category => category.tag === 'movies') as CategoriesHobbies,
+        year: 2009,
+        spotify: '',
+        youtube:'',
+        deezer: '',
+        genre: 'War'
+    },
+
+    {
+        titlePt: 'Bastardos Inglórios',
+        titleEn: 'Inglorious Bastards',
+        descPt: 'Filme de 2009 que se passa durante a segunda guerra mundial.',
+        descEn: '2019 film set during World War II.',
+        mainArtist: 'Quentin Tarantino',
+        imageUrl: '',
+        categorie: Categories.find(category => category.tag === 'movies') as CategoriesHobbies,
+        year: 2009,
+        spotify: '',
+        youtube:'',
+        deezer: '',
+        genre: 'War'
     },
 
 

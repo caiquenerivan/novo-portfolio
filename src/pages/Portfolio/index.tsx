@@ -8,6 +8,8 @@ import { Tag } from "../../components/Tag";
 
 export default function Portfolio() {
   const { language } = useContext(LanguageContext);
+  const [isModalOn, setIsModalOn] = useState(false);
+
 
   return (
     <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9">
@@ -68,8 +70,6 @@ export default function Portfolio() {
         <div className="flex flex-col w-full justify-center items-center">
           <div className="flex py-4 flex-col lg:grid grid-cols-3">
             {works.map((work, index) => {
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              const [isModalOn, setIsModalOn] = useState(false);
 
               const handleOpenModal = () => setIsModalOn(true);
               const handleCloseModal = () => setIsModalOn(false);

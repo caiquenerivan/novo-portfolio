@@ -4,15 +4,20 @@ import { LanguageContext } from "../../context/LanguageContext";
 import { Tag } from "../../components/Tag";
 import { Title } from "../../components/Title";
 import { Categories, HobbiesPost } from "../../data/hobbiesPosts";
-
+import Carousel from "../../components/Carousel";
 
 export default function Hobbies() {
   const { language } = useContext(LanguageContext);
   const [active, setActive] = useState<string>("music");
 
+  const filteredHobbies = HobbiesPost.filter(
+    (hobbie) => hobbie.categorie.tag === active
+  );
+
+
   return (
-    <div className="flex flex-col h-screen w-full pl-16 justify-center max-w-screen-3xl">
-      <div className="flex flex-col px-8 py-4">
+    <div className="flex flex-col w-full pl-16 pb-0 justify-center max-w-screen-3xl ">
+      <div className="flex flex-col px-8 pt-2">
         <Tag>{Tags.abrirH2}</Tag>
         <div className="flex flex-col w-full px-4">
           <Title>Hobbies</Title>
@@ -35,9 +40,8 @@ export default function Hobbies() {
           Java | Typescript Developer
         </p>
         <Tag>{Tags.fecharP}</Tag>
-        <Tag>{Tags.abrirSection}</Tag>
-        <div className="p-2 w-full flex flex-col justify-center items-center">
-          <div className="flex border-b-4 border-teal-500 items-center w-full my-2">
+        <div className="px-2 w-full flex flex-col justify-center items-center">
+          <div className="flex border-b-4 border-teal-500 items-center w-full mt-2">
             {Categories.map((Category, index) => (
               <button
                 key={index}
@@ -48,30 +52,25 @@ export default function Hobbies() {
                 } px-2 text-sm`}
                 onClick={() => setActive(Category.tag)}
               >
-                <span className={`${language === 'pt'? '':'hidden'}`}> {Category.titlePt}</span>
-                <span className={`${language === 'en'? '':'hidden'}`}> {Category.titleEn}</span>
+                <span className={`${language === "pt" ? "" : "hidden"}`}>
+                  {Category.titlePt}
+                </span>
+                <span className={`${language === "en" ? "" : "hidden"}`}>
+                  {Category.titleEn}
+                </span>
               </button>
             ))}
           </div>
-          <div className="my-2 flex flex-row">
-            {
-                HobbiesPost.map((hobbie, index)=>(
-                    <div key={index} className={`${active === hobbie.categorie.tag? '':'hidden'} hover:w-full`}>
-                        <img src={hobbie.imageUrl} alt="" className="w-2 transition ease-in-out delay-200 hover:w-72 h-52 shadow-md rounded-sm hover:neon-teal object-cover hover:object-fill" >
-                            
-                        
-                        </img>
-                    </div>
-                ))
-            }
-          </div>
+
+          <Carousel active={active} hobbies={filteredHobbies} />
         </div>
-        <Tag>{Tags.fecharSection}</Tag>
       </div>
       <div className="px-4">
         <Tag>{Tags.fecharBody}</Tag>
       </div>
-      <Tag>{Tags.fecharHTML}</Tag>
+      <div className="pb-4">
+        <Tag>{Tags.fecharHTML}</Tag>
+      </div>
     </div>
   );
 }
