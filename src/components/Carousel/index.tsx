@@ -22,16 +22,27 @@ const Carousel: React.FC<CarouselProps> = ({ hobbies, active }) => {
   const { language } = useContext(LanguageContext);
 
   return (
-    <div className="w-full">
+    <div className="py-2">
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
+        loop={true}
         spaceBetween={2}
         slidesPerView={1}
-        className="p-2 my-4 w-56 h-96"
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 250,
+          },
+        }}
+        className="p-2 mx-4"
       >
         {hobbies.map((hobbie, index) => (
-          <SwiperSlide key={index}>
-            <div className="h-full w-48 bg-teal-100 rounded-md p-2 justify-around">
+          <SwiperSlide key={index} className="p-0 m-0 h" >
+            <div className="card-responsivo bg-teal-100 rounded-md flex flex-col p-2 items-center pb-4 swiper">
               <img
                 src={hobbie.imageUrl}
                 alt={`${
@@ -40,11 +51,11 @@ const Carousel: React.FC<CarouselProps> = ({ hobbies, active }) => {
                     : `${hobbie.titlePt} cover`
                 }`}
                 className={`${
-                  active === "music" ? "h-48" : ""
-                } w-48 rounded-md pointer-events-none object-cover border-4 border-teal-50`}
+                  active === "music" ? "h-48 md:h-full xl:h-72" : active === "more" ? "md:h-72" : ""
+                } img-card w-48 md:w-full xl:w-72 rounded-md pointer-events-none object-cover border-4 border-teal-50 `}
               />
-              <div className="flex flex-col justify-around">
-                <h3 className="text-teal-600 text-xl pt-2 londrina-solid-regular pl-2">
+              <div className="flex flex-col justify-between my-2 px-2 w-full ">
+                <h3 className="text-teal-600 text-xl pt-2 londrina-solid-regular pl-2 md:text-2xl lg:text-2xl ">
                   <span className={`${language === "pt" ? "" : "hidden"}`}>
                     {hobbie.titlePt}
                   </span>
@@ -52,13 +63,24 @@ const Carousel: React.FC<CarouselProps> = ({ hobbies, active }) => {
                     {hobbie.titleEn}
                   </span>
                 </h3>
-                <p className="text-teal-600 text-lg londrina-solid-light pl-2">
-                  {hobbie.mainArtist}
+                <div className="flex justify-between flex-col w-full">
+                  <p className="text-teal-600 text-lg londrina-solid-light pl-2 text-left md:text-2xl lg:text-2xl ">
+                    {hobbie.mainArtist}
+                  </p>
+                  <p className="text-teal-600 text-lg londrina-solid-light pl-2 text-left md:text-2xl lg:text-2xl ">
+                    {hobbie.year}
+                  </p>
+                </div>
+                <p className="text-teal-600 text-base londrina-solid-light pl-2 text-left md:text-2xl lg:text-2xl ">
+                  <span className={`${language === "pt" || !hobbie.descPt ? "" : "hidden"}`}>
+                    {hobbie.descPt}
+                  </span>
+                  <span className={`${language === "en" || !hobbie.descEn ? "" : "hidden"}`}>
+                    {hobbie.descEn}
+                  </span>
                 </p>
-                <p className="text-teal-600 text-lg londrina-solid-light pl-2">
-                  {hobbie.year}
-                </p>
-                <div className="flex flex-row items-center justify-between pt-4 px-4">
+
+                <div className="flex flex-row items-center justify-between w-full pt-4 px-4">
                   <a
                     href={hobbie.spotify}
                     className={`${!hobbie.spotify ? "hidden" : ""} h-8 w-8`}

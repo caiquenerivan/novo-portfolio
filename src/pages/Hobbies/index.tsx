@@ -14,9 +14,8 @@ export default function Hobbies() {
     (hobbie) => hobbie.categorie.tag === active
   );
 
-
   return (
-    <div className="flex flex-col w-full pl-16 pb-0 justify-center max-w-screen-3xl ">
+    <div className="flex flex-col w-full pl-16 pb-0 justify-center max-w-screen-3xl min-h-screen">
       <div className="flex flex-col px-8 pt-2">
         <Tag>{Tags.abrirH2}</Tag>
         <div className="flex flex-col w-full px-4">
@@ -28,16 +27,18 @@ export default function Hobbies() {
         <p
           className={`${
             language === "pt" ? "" : "hidden"
-          } px-4 py-1 text-stone-50 open-sans-regular text-left text-sm sm:text-md md:text-4xl`}
+          } px-4 py-1 text-stone-50 open-sans-regular text-left text-sm sm:text-md md:text-xl lg:text-3xl`}
         >
-          Desenvolvedor Java | Typescript
+          Aqui estão algumas das atividades e conteúdos que gosto de fazer,
+          escutar e assistir durante o meu tempo livre.
         </p>
         <p
           className={`${
             language === "en" ? "" : "hidden"
-          } px-4 py-1 text-stone-50 open-sans-regular text-left text-sm sm:text-md md:text-4xl`}
+          } px-4 py-1 text-stone-50 open-sans-regular text-left text-sm  sm:text-md md:text-xl lg:text-3xl`}
         >
-          Java | Typescript Developer
+          Here are some of the activities and content I enjoy doing, listening
+          to, and watching in my free time.
         </p>
         <Tag>{Tags.fecharP}</Tag>
         <div className="px-2 w-full flex flex-col justify-center items-center">
@@ -49,7 +50,7 @@ export default function Hobbies() {
                   active === Category.tag
                     ? "bg-teal-500 text-gray-700"
                     : "bg-transparent text-teal-500"
-                } px-2 text-sm`}
+                } px-2 text-sm md:text-lg lg:text-4xl lg:px-6`}
                 onClick={() => setActive(Category.tag)}
               >
                 <span className={`${language === "pt" ? "" : "hidden"}`}>
@@ -61,9 +62,8 @@ export default function Hobbies() {
               </button>
             ))}
           </div>
-
-          <Carousel active={active} hobbies={filteredHobbies} />
         </div>
+        <Carousel active={active} hobbies={filteredHobbies} />
       </div>
       <div className="px-4">
         <Tag>{Tags.fecharBody}</Tag>

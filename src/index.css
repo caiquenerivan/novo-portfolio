@@ -48,3 +48,37 @@
 .neon-red {
   text-shadow: 1px 1px 2px #dc2626, 0 0 1em #dc2626, 0 0 0.2em #dc2626;
 }
+
+
+.card-responsivo{
+  width: 192px;
+  height: 400px;
+}
+.img-card{
+  max-height: 250px;
+}
+
+@media (min-width: 768px) {
+  .card-responsivo{
+    width: 250px;
+    height: 550px;
+  }  
+  .img-card{
+    max-height: 350px;
+  }
+}
+
+
+@media (min-width: 820px) {
+  .card-responsivo{
+    width: 300px;
+    max-height: 480px;
+  }  
+}
+
+
+.inline-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

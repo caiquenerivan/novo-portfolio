@@ -163,7 +163,7 @@ export default function Contact() {
             </button>
           </form>
         </div>
-        <Tag>{Tags.fecharForm}</Tag>
+        <Tag>{"</form>"}</Tag>
       </div>
     </div>
   );
