@@ -9,7 +9,7 @@ export default function About() {
   const { language } = useContext(LanguageContext);
 
   return (
-    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl">
+    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl 3xl:pl-96">
       <div className="flex flex-col px-8 py-4 mxl:flex-row">
         <div className="w-full flex flex-col mxl:w-1/2">
           <Tag>{Tags.abrirH2}</Tag>

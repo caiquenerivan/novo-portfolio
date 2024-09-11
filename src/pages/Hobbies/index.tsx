@@ -15,7 +15,7 @@ export default function Hobbies() {
   );
 
   return (
-    <div className="flex flex-col w-full pl-16 pb-0 justify-center max-w-screen-3xl min-h-screen">
+    <div className="flex flex-col w-full pl-16 pb-0 justify-center max-w-screen-3xl min-h-screen  3xl:pl-96">
       <div className="flex flex-col px-8 pt-2">
         <Tag>{Tags.abrirH2}</Tag>
         <div className="flex flex-col w-full px-4">
