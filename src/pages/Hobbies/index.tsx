@@ -4,7 +4,7 @@ import { LanguageContext } from "../../context/LanguageContext";
 import { Tag } from "../../components/Tag";
 import { Title } from "../../components/Title";
 import { Categories, HobbiesPost } from "../../data/hobbiesPosts";
-import Carousel from "../../components/Carousel";
+import CarouselHobbies from "../../components/CarouselHobbies";
 
 export default function Hobbies() {
   const { language } = useContext(LanguageContext);
@@ -63,7 +63,7 @@ export default function Hobbies() {
             ))}
           </div>
         </div>
-        <Carousel active={active} hobbies={filteredHobbies} />
+        <CarouselHobbies active={active} hobbies={filteredHobbies} />
       </div>
       <div className="px-4">
         <Tag>{Tags.fecharBody}</Tag>

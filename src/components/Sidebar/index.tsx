@@ -11,6 +11,7 @@ import {
   FaLinkedin,
   FaPerson,
   FaWhatsapp,
+  FaLaptop,
 } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { IconType } from "react-icons";
@@ -40,6 +41,7 @@ export default function Sidebar() {
   const Menus = [
     { titleEn: "Home", titlePt: "Página Inicial", src: FaHome, linkTo:"" },
     { titleEn: "About", titlePt: "Sobre Mim", src: FaPerson, linkTo:"about" },
+    { titleEn: "Services", titlePt: "Serviços", src: FaLaptop, linkTo: "services" },
     { titleEn: "Portfolio", titlePt: "Portfolio", src: FaCode, linkTo:"portfolio"  },
     { titleEn: "Contact", titlePt: "Contato",  src: FaAt, linkTo:"contact" },
     { titleEn: "Hobbies", titlePt: "Hobbies", src: FaGuitar, gap: true, linkTo:"hobbies" },
@@ -124,7 +126,7 @@ export default function Sidebar() {
             </a>
           </div>
         </div>
-        <div className="w-full h-1/5 flex">
+        <div className="w-full h-1/5 flex pt-8">
           <div
             className={`w-full flex flex-row justify-center duration-300`}
           >

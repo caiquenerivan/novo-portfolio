@@ -8,6 +8,7 @@ import {
   FaGithub,
   FaGuitar,
   FaInstagram,
+  FaLaptop,
   FaLinkedin,
   FaPerson,
   FaWhatsapp,
@@ -41,6 +42,7 @@ export default function SidebarMobile() {
   const Menus = [
     { titleEn: "Home", titlePt: "Página Inicial", src: FaHome, linkTo: "" },
     { titleEn: "About", titlePt: "Sobre Mim", src: FaPerson, linkTo: "about" },
+    { titleEn: "Services", titlePt: "Serviços", src: FaLaptop, linkTo: "services" },
     {
       titleEn: "Portfolio",
       titlePt: "Portfolio",
@@ -58,7 +60,7 @@ export default function SidebarMobile() {
   ] as Menu[];
 
   return (
-    <div className="fixed h-screen z-50 3xl:hidden">
+    <div className="fixed h-screen z-40 3xl:hidden">
       <div
         className={`${
           open ? "w-80" : "w-2/6 min-w-10"
@@ -125,6 +127,7 @@ export default function SidebarMobile() {
                   <Link
                     to={`/${Menu.linkTo}`}
                     className="flex items-center justify-center"
+                    onClick={()=>setOpen(false)}
                   >
                     <Menu.src />
                     <p className={`px-2 ${language === "en" ? "" : "hidden"}`}>
@@ -139,7 +142,7 @@ export default function SidebarMobile() {
             </ul>
           </div>
 
-          <div className="flex">
+          <div className="flex mb-8">
             <a href="https://www.instagram.com/caiquenerivan" target="blank">
               <FaInstagram size={30} color="#d6d3d1" className="mx-2" />
             </a>
@@ -166,7 +169,7 @@ export default function SidebarMobile() {
             </a>
           </div>
         </div>
-        <div className="w-full h-1/5 flex">
+        <div className="w-full h-1/5 flex pt-8">
           <div
             className={`w-full flex flex-row justify-center ${
               open ? "" : "hidden"

@@ -1,7 +1,5 @@
-//import { motion } from "framer-motion";
 import { Hobbies } from "../../data/hobbiesPosts";
 import React, { useContext } from "react";
-//import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaDeezer, FaSpotify } from "react-icons/fa6";
 import { SiYoutubemusic } from "react-icons/si";
 import { LanguageContext } from "../../context/LanguageContext";
@@ -18,7 +16,7 @@ interface CarouselProps {
   active: string;
 }
 
-const Carousel: React.FC<CarouselProps> = ({ hobbies, active }) => {
+const CarouselHobbies: React.FC<CarouselProps> = ({ hobbies, active }) => {
   const { language } = useContext(LanguageContext);
 
   return (
@@ -115,4 +113,4 @@ const Carousel: React.FC<CarouselProps> = ({ hobbies, active }) => {
   );
 };
 
-export default Carousel;
+export default CarouselHobbies;
