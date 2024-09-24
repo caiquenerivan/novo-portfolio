@@ -4,10 +4,25 @@ import works from "../../data/works";
 import Modal from "../../components/Modal";
 import { Title } from "../../components/Title";
 import { Tag } from "../../components/Tag";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 
 export default function Portfolio() {
   const { language } = useContext(LanguageContext);
   const [activeWorkIndex, setActiveWorkIndex] = useState<number | null>(null);
+  const [showCount, setShowCount] = useState<number>(3);
+
+  const showMore = () => {
+    setShowCount((prevCount) => prevCount + 3);
+    console.log(showCount);
+  };
+  const showLess = () => {
+    if (showCount == 3) {
+      console.log(showCount);
+      return showCount;
+    }
+    setShowCount((prevCount) => prevCount - 3);
+    console.log(showCount);
+  };
 
   const handleOpenModal = (index: number) => setActiveWorkIndex(index);
   const handleCloseModal = () => setActiveWorkIndex(null);
@@ -58,11 +73,11 @@ export default function Portfolio() {
             </p>
           </div>
         </div>
-        <Tag>{'</p>'}</Tag>
-        <Tag>{'<section>'}</Tag>
+        <Tag>{"</p>"}</Tag>
+        <Tag>{"<section>"}</Tag>
         <div className="flex flex-col w-full justify-center items-center">
           <div className="flex py-4 flex-col lg:grid grid-cols-3">
-            {works.map((work, index) => {
+            {works.slice(0, showCount).map((work, index) => {
               return (
                 <div
                   key={index}
@@ -241,9 +256,26 @@ export default function Portfolio() {
               );
             })}
           </div>
-          <button className="text-teal-500 text-center ">Ver Mais</button>
+          <div className="flex">
+            {showCount < works.length && (
+              <button
+                className="text-teal-500 text-center p-2 border-2 rounded-full border-slate-700 hover:border-teal-500 transition-all"
+                onClick={() => showMore()}
+              >
+                <FaChevronDown />
+              </button>
+            )}
+            {showCount > 3 && (
+              <button
+                className="text-teal-500 text-center p-2 border-2 rounded-full border-slate-700 hover:border-teal-500 transition-all"
+                onClick={() => showLess()}
+              >
+                <FaChevronUp />
+              </button>
+            )}
+          </div>
         </div>
-        <Tag>{'</section>'}</Tag>
+        <Tag>{"</section>"}</Tag>
       </div>
       <div></div>
     </div>

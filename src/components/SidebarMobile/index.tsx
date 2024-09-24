@@ -50,13 +50,13 @@ export default function SidebarMobile() {
       linkTo: "portfolio",
     },
     { titleEn: "Contact", titlePt: "Contato", src: FaAt, linkTo: "contact" },
-    {
+    /*{
       titleEn: "Hobbies",
       titlePt: "Hobbies",
       src: FaGuitar,
       gap: true,
       linkTo: "hobbies",
-    },
+    },*/
   ] as Menu[];
 
   return (

@@ -19,9 +19,9 @@ export const workType = [
     {
         titlePt: "Loja Online",
         titleEn: "E-Commerce",
-        descPt: "Transforme suas ideias em aplicativos móveis elegantes e fáceis de usar. Posso criar apps dinâmicos e de alto desempenho que encantam os usuários e impulsionam o engajamento.",
+        descPt: "Transforme sua ideia em um negócio digital com nossos sites para vendas! Layouts modernos, responsivos e otimizados para conversão, criados sob medida para atrair clientes e impulsionar suas vendas online.",
         descEn: "Transform your ideas into sleek, user-friendly mobile apps. I craft dynamic, high-performance apps that captivate users and drive engagement.",
-        image: "https://i.imgur.com/eYpgMrH.jpeg",
+        image: "https://i.pinimg.com/564x/6d/0d/e4/6d0de441ce873b437db4d81eaea42213.jpg",
     },
     {
         titlePt: "Aplicativos Móveis",

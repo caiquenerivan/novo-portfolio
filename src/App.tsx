@@ -23,7 +23,9 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/hobbies" element={<Hobbies />} />
+          {
+          //<Route path="/hobbies" element={<Hobbies />} />
+          }
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
