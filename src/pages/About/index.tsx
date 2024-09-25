@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import Tags from "../../data/tags";
 import { LanguageContext } from "../../context/LanguageContext";
 import skills from "../../data/skills";
 import { Tag } from "../../components/Tag";
@@ -12,7 +11,7 @@ export default function About() {
     <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl 3xl:pl-96">
       <div className="flex flex-col px-8 py-4 mxl:flex-row">
         <div className="w-full flex flex-col mxl:w-1/2">
-          <Tag>{Tags.abrirH2}</Tag>
+          <Tag>{"<h2>"}</Tag>
           <div className="flex flex-col w-full pl-4">
             <div className="lg:flex">
               <Title>
@@ -25,56 +24,61 @@ export default function About() {
               </Title>
             </div>
           </div>
-          <Tag>{Tags.fecharH2}</Tag>
-          <Tag>{Tags.abrirP}</Tag>
+          <Tag>{"</h2>"}</Tag>
+          <Tag>{"<p>"}</Tag>
           <div className="px-4">
             <p
               className={`${
                 language === "pt" ? "" : "hidden"
               } py-1 text-stone-50 open-sans-regular text-left text-sm sm:text-md md:text-2xl`}
             >
-              Mussum Ipsum, cacilds vidis litro abertis. Si num tem leite então
-              bota uma pinga aí cumpadi! Aenean aliquam molestie leo, vitae
-              iaculis nisl. Posuere libero varius. Nullam a nisl ut ante blandit
-              hendrerit. Aenean sit amet nisi. Viva Forevis aptent taciti
-              sociosqu ad litora torquent.
+              Sou desenvolvedor full-stack, formado em Análise e Desenvolvimento
+              de Sistemas (2017) e pós-graduado em Computação em Nuvem.
+              Especializado em sites e apps personalizados com React,
+              TypeScript, Java e AWS, sempre focado na experiência do usuário.
+              Atualmente, estou desenvolvendo um projeto de auxílio de treino
+              que conecta personal trainers e alunos por meio de uma plataforma
+              interativa. Meu objetivo é ajudar empresas a crescerem com
+              soluções sob medida e responsivas, de estratégias de SEO a
+              aplicativos móveis de impacto.
             </p>
             <p
               className={`${
                 language === "en" ? "" : "hidden"
               }  py-1 text-stone-50 open-sans-regular text-left text-sm sm:text-md md:text-2xl`}
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur.
+              I’m a full-stack developer with a degree in Systems Analysis and
+              Development (2017) and a postgrad in Cloud Computing. I specialize
+              in custom websites and apps using React, TypeScript, Java, and
+              AWS, always focused on user experience. Currently, I’m developing
+              a fitness project that connects trainers and clients through an
+              interactive platform. My goal is to help businesses grow with
+              tailored, responsive solutions, from SEO strategies to impactful
+              mobile apps.
             </p>
           </div>
-          <Tag>{Tags.fecharP}</Tag>
+          <Tag>{"</p>"}</Tag>
         </div>
         <div className="mxl:w-1/2">
-          <Tag>{Tags.abrirH2}</Tag>
+          <Tag>{"<h2>"}</Tag>
           <div className="w-2/5 pl-4">
             <Title>Skills</Title>
           </div>
-          <Tag>{Tags.fecharH2}</Tag>
-          <Tag>{Tags.abrirP}</Tag>
+          <Tag>{"</h2>"}</Tag>
+          <Tag>{"<p>"}</Tag>
 
           <div className="grid grid-cols-2 mxl:grid-cols-3">
             {skills.map((item, index) => (
               <p
                 key={index}
-                className={`noWrap neon-red uppercase px-4 py-1 text-red-600 open-sans-regular text-left text-xs sm:text-sm md:text-md`}
+                className={`noWrap neon-red uppercase px-4 py-1 text-red-600 josefin-slab-regular text-left text-xs sm:text-sm md:text-md`}
               >
                 {item}
               </p>
             ))}
           </div>
-          <Tag>{Tags.fecharP}</Tag>
-          <Tag>{Tags.abrirButton}</Tag>
-
+          <Tag>{"</p>"}</Tag>
+          <Tag>{"<button>"}</Tag>
           <button className="border-solid border-2 border-teal-500 rounded-3xl m-4 w-48 h-12 hover:bg-teal-500 text-gray-700">
             <p
               className={`${
@@ -91,7 +95,7 @@ export default function About() {
               Download Resumè
             </p>
           </button>
-          <Tag>{Tags.fecharButton}</Tag>
+          <Tag>{"</button>"}</Tag>
         </div>
       </div>
     </div>

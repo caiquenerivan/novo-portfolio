@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import Tags from "../../data/tags";
 import { LanguageContext } from "../../context/LanguageContext";
 import { Tag } from "../../components/Tag";
 
@@ -8,12 +7,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen w-full pl-16 justify-center max-w-screen-3xl  3xl:pl-96">
-      <Tag>{Tags.abrirHTML}</Tag>
+      <Tag>{'<html>'}</Tag>
       <div className="px-4">
-        <Tag>{Tags.abrirBody}</Tag>
+        <Tag>{'<body>'}</Tag>
       </div>
       <div className="flex flex-col px-8 py-4">
-        <Tag>{Tags.abrirH1}</Tag>
+        <Tag>{'<h1>'}</Tag>
         <div className="flex flex-col w-full px-4">
           <h1 className="text-stone-50 londrina-solid-regular text-2xl text-left py-1 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
             <span className={`${language === "pt" ? "" : "hidden"}`}>Olá,</span>
@@ -38,9 +37,9 @@ export default function Home() {
             </span>
           </h1>
         </div>
-        <Tag>{Tags.fecharH1}</Tag>
+        <Tag>{'</h1>'}</Tag>
 
-        <Tag>{Tags.abrirP}</Tag>
+        <Tag>{'<p>'}</Tag>
         <p
           className={`${
             language === "pt" ? "" : "hidden"
@@ -55,7 +54,8 @@ export default function Home() {
         >
           Java | Typescript Developer
         </p>
-        <Tag>{Tags.fecharP}</Tag>
+        <Tag>{'</p>'}</Tag>
+
       </div>
     </div>
   );

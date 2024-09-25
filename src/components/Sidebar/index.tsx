@@ -6,7 +6,7 @@ import {
   FaAt,
   FaCode,
   FaGithub,
-  FaGuitar,
+  //FaGuitar,
   FaInstagram,
   FaLinkedin,
   FaPerson,

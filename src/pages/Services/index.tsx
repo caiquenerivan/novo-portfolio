@@ -27,8 +27,7 @@ const Services = () => {
           </div>
         </div>
         <Tag>{"</h2>"}</Tag>
-        <Tag>{"<h3>"}</Tag>
-
+        <Tag>{"<p>"}</Tag>
         <div className="w-full flex flex-col lg:flex-row">
           <div className="w-full">
             <p
@@ -45,12 +44,6 @@ const Services = () => {
             >
               Elevate your online presence with creative solutions!
             </p>
-          </div>
-        </div>
-        <Tag>{"</h3>"}</Tag>
-        <Tag>{"<p>"}</Tag>
-        <div className="w-full flex flex-col lg:flex-row">
-          <div className="w-full">
             <p
               className={`${
                 language === "pt" ? "" : "hidden"
@@ -72,7 +65,7 @@ const Services = () => {
         <Tag>{"</p>"}</Tag>
         <Tag>{"<section>"}</Tag>
 
-        <Carousel items={workType} />
+        <Carousel items={workType}/>
 
         <Tag>{"</section>"}</Tag>
       </div>

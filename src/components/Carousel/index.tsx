@@ -20,13 +20,13 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
   };
 
   return (
-    <div className="carousel bg-teal-200 border-teal-600 border-4">
+    <div className="carousel bg-teal-200 border-teal-600 border-4 pb-8">
       <div className="carousel-inner" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
         {items.map((item, index) => (
           <div key={index} className={`carousel-item ${index === currentIndex ? 'active' : ''}`}>
             <img src={item.image} alt={item.titlePt} className="img-card object-cover" />
             <h3 className="carousel-title text-teal-600 londrina-solid-regular">{item.titlePt}</h3>
-            <p className="carousel-caption text-teal-600 londrina-solid-light mx-4 text-justify">{item.descPt}</p>
+            <p className="carousel-caption text-teal-600 londrina-solid-light mx-8 text-justify">{item.descPt}</p>
           </div>
         ))}
       </div>

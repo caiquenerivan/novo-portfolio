@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
-import Tags from "../../data/tags";
 import { LanguageContext } from "../../context/LanguageContext";
 import { Title } from "../../components/Title";
 import { Tag } from "../../components/Tag";
+import emailjs from "@emailjs/browser";
+import { ConectarEmail } from "../../data/emailJsConnect";
+
 
 interface FormData {
   name: string;
@@ -36,13 +38,40 @@ export default function Contact() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Dados do formulário:", formData);
-    // Aqui você pode adicionar a lógica para enviar os dados, por exemplo, para uma API
+
+    const templateParams = {
+      from_name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.subject,
+      message: formData.message,
+    };
+
+    emailjs
+      .send(
+        ConectarEmail.serviceId,
+        ConectarEmail.templateId,
+        templateParams,
+        ConectarEmail.templateParams
+      )
+      .then((response) => {
+        console.log("Email enviado", response.status, response.text);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      }, (err) => {
+        console.log("Erro: ", err);
+      });
   };
 
   return (
     <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl  3xl:pl-96">
       <div className="px-8">
-        <Tag>{Tags.abrirH2}</Tag>
+        <Tag>{"<h2>"}</Tag>
 
         <div className="flex flex-col w-full px-4">
           <div className="lg:flex">
@@ -56,8 +85,9 @@ export default function Contact() {
             </Title>
           </div>
         </div>
-        <Tag>{Tags.fecharH2}</Tag>
-        <Tag>{Tags.abrirP}</Tag>
+        <Tag>{"</h2>"}</Tag>
+
+        <Tag>{"<p>"}</Tag>
         <div className="w-full flex flex-col pr-6 lg:flex-row">
           <div className="w-full">
             <p
@@ -65,19 +95,51 @@ export default function Contact() {
                 language === "pt" ? "" : "hidden"
               } px-4 py-1 text-stone-50 open-sans-regular text-justify text-sm sm:text-xl mxl:text-3xl`}
             >
-              Vamos Criar Algo Incrível Juntos!
+              Vamos Criar Algo Incrível Juntos! <br />
+              Você pode me enviar mensagem pelo formulário ou através do <br />
+              <a
+                href="https://wa.me/5511956540311"
+                target="_blank"
+                className="text-teal-600 italic neon-teal-hover hover:text-teal-400"
+              >
+                WhatsApp
+              </a>{" "}
+              ou{" "}
+              <a
+                href="https://wa.me/5511956540311"
+                target="_blank"
+                className="text-teal-600 italic neon-teal-hover hover:text-teal-400"
+              >
+                Telegram
+              </a>
             </p>
             <p
               className={`${
                 language === "en" ? "" : "hidden"
-              }  px-4 py-1 text-stone-50 open-sans-regular text-justify text-sm sm:text-md mxl:text-3xl`}
+              }  px-4 py-1 text-stone-50 open-sans-regular text-justify text-sm sm:text-xl mxl:text-3xl`}
             >
-              Let's Create Something Amazing Together!
+              Let's Create Something Amazing Together! <br />
+              You can send me a message through the form or via <br />
+              <a
+                href="https://wa.me/5511956540311"
+                target="_blank"
+                className="text-teal-600 italic neon-teal-hover hover:text-teal-400"
+              >
+                WhatsApp
+              </a>{" "}
+              or{" "}
+              <a
+                href="https://t.me/caiquenerivan"
+                target="_blank"
+                className="text-teal-600 italic neon-teal-hover hover:text-teal-400"
+              >
+                Telegram
+              </a>
             </p>
           </div>
         </div>
-        <Tag>{Tags.fecharP}</Tag>
-        <Tag>{Tags.abrirForm}</Tag>
+        <Tag>{"</p>"}</Tag>
+        <Tag>{"<form>"}</Tag>
 
         <div className="w-full flex flex-col px-6 lg:flex-row">
           <form onSubmit={handleSubmit} className="w-full">
@@ -105,13 +167,14 @@ export default function Contact() {
                 required
               />
               <input
-                type="number"
+                type="tel"
                 name="phone"
                 placeholder={`${
                   language === "en"
                     ? "Type your phone number..."
                     : "Digite seu telefone"
                 }`}
+                pattern="+[0-9]{2} [0-9]{2} [0-9]{5}-[0-9]{4}"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full my-2 bg-transparent border-b-2 border-teal-700 px-2 py-1 text-stone-50 lg:text-2xl lg:h-12 mxl:text-3xl "
@@ -144,7 +207,7 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="my-2 border-2 border-teal-700 rounded-2xl hover:bg-teal-700 text-gray-700 lg:text-2xl lg:h-12 mxl:text-3xl" 
+              className="my-2 border-2 border-teal-700 rounded-2xl hover:bg-teal-700 text-gray-700 lg:text-2xl lg:h-12 mxl:text-3xl"
             >
               <p
                 className={`${
@@ -161,7 +224,8 @@ export default function Contact() {
                 Enviar
               </p>
             </button>
-          </form>
+          </form>          
+          
         </div>
         <Tag>{"</form>"}</Tag>
       </div>

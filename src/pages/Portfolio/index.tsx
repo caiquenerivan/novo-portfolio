@@ -57,19 +57,16 @@ export default function Portfolio() {
                 language === "pt" ? "" : "hidden"
               } px-4 py-1 text-stone-50 open-sans-regular text-justify text-sm sm:text-xl md:text-xl`}
             >
-              Mussum Ipsum, cacilds vidis litro abertis. Si num tem leite então
-              bota uma pinga aí cumpadi! Aenean aliquam molestie leo, vitae
-              iaculis nisl. Posuere libero varius.
+              Confira alguns dos meus projetos e veja como transformo ideias em
+              soluções digitais impactantes.
             </p>
             <p
               className={`${
                 language === "en" ? "" : "hidden"
               }  px-4 py-1 text-stone-50 open-sans-regular text-justify text-sm sm:text-md md:text-xl`}
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              Take a look at my projects and see how I turn ideas into impactful
+              digital solutions.
             </p>
           </div>
         </div>

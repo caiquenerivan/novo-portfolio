@@ -7,6 +7,6 @@ const skills = [
     "rest api", "nodejs",
     "cloud computing", "sass/scss",
     "css3", "html5",
-    "styled components" ];
+    "styled components", "AWS" ];
 
 export default skills;
