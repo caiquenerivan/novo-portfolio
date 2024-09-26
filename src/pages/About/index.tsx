@@ -73,7 +73,7 @@ export default function About() {
                 key={index}
                 className={`noWrap neon-red uppercase px-4 py-1 text-red-600 josefin-slab-regular text-left text-xs sm:text-sm md:text-md`}
               >
-                {item}
+                {item.name}
               </p>
             ))}
           </div>

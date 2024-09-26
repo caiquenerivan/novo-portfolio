@@ -79,11 +79,11 @@ export default function Portfolio() {
                 <div
                   key={index}
                   style={{ borderColor: work.mainLanguage.colorHexa }}
-                  className={`py-8 min-w-60 max-w-80 h-50 mb-8  mx-2 border-t-4 border-${work.colorName} rounded-sm shadow-lg p-4`}
+                  className={`py-8 min-w-60 max-w-80 h-50 mb-8  mx-2 border-t-4 rounded-sm shadow-lg p-4`}
                 >
                   <p
                     style={{ color: work.mainLanguage.colorHexa }}
-                    className={`my-1 text-${work.colorName} uppercase josefin-slab-regular text-left text-sm sm:text-xl md:text-xl`}
+                    className={`my-1 uppercase josefin-slab-regular text-left text-sm sm:text-xl md:text-xl`}
                   >
                     {work.mainLanguage.name}
                   </p>
@@ -162,7 +162,7 @@ export default function Portfolio() {
 
                         <p
                           style={{ color: work.mainLanguage.colorHexa }}
-                          className={`my-1 text-${work.colorName} josefin-slab-regular text-left text-sm sm:text-xl md:text-xl mxl:text-5xl`}
+                          className={`my-1 josefin-slab-regular text-left text-sm sm:text-xl md:text-xl mxl:text-5xl`}
                         >
                           {work.mainLanguage.name}
                         </p>
@@ -191,7 +191,7 @@ export default function Portfolio() {
                               className="text-left my-2 mxl:text-4xl"
                               key={index}
                             >
-                              {skill}
+                              {skill.name}
                             </p>
                           ))}
                         </div>
