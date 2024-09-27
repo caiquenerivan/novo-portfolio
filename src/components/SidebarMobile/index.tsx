@@ -6,7 +6,6 @@ import {
   FaAt,
   FaCode,
   FaGithub,
-  FaGuitar,
   FaInstagram,
   FaLaptop,
   FaLinkedin,
@@ -92,7 +91,7 @@ export default function SidebarMobile() {
             open ? "" : "hidden"
           }`}
         >
-          <h1 className="text-shadow font-extrabold text-red-600 text-6xl">
+          <h1 className="text-shadow font-extrabold londrina-solid-regular text-red-600 text-6xl">
             CN
           </h1>
           <h2

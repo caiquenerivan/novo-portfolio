@@ -9,7 +9,7 @@ const Services = () => {
   const { language } = useContext(LanguageContext);
 
   return (
-    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9 3xl:pl-96">
+    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9 3xl:pl-96 z-10">
       <div className="flex flex-col px-8 pt-2">
         <Tag>{"<h2>"}</Tag>
         <div className="flex flex-col w-full px-4">

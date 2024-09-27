@@ -67,7 +67,7 @@ export default function Sidebar() {
         <div
           className={`w-full h-1/5 bg-gray-900 m-0 flex justify-center items-center flex-col`}
         >
-          <h1 className="text-shadow font-extrabold text-red-600 text-6xl">
+          <h1 className="text-shadow londrina-solid-regular font-extrabold text-red-600 text-6xl">
             CN
           </h1>
           <h2

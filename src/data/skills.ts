@@ -10,6 +10,10 @@ const skills = [
         colorHexa: "#14b8a6",
     },
     {
+        name: "spring",
+        colorHexa: "#14b8a6",
+    },
+    {
         name: "reactjs",
         colorHexa: "#8b5cf6",
     },
@@ -72,10 +76,6 @@ const skills = [
     {
         name: "AWS",
         colorHexa: "#0ea5e9",
-    },    
-    {
-        name: "html5/css3",
-        colorHexa: "#ef4444",
     },
 ] as skillsType[];
 

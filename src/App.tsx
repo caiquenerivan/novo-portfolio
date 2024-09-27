@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Portfolio from "./pages/Portfolio";
 import Contact from "./pages/Contact";
-import Hobbies from "./pages/Hobbies";
+//import Hobbies from "./pages/Hobbies";
 import NotFoundPage from "./pages/NotFoundPage";
+import { Particulas } from "./components/Particulas";
 
 function App() {
   return (
@@ -24,10 +25,11 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
           {
-          //<Route path="/hobbies" element={<Hobbies />} />
+            //<Route path="/hobbies" element={<Hobbies />} />
           }
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <Particulas />
       </BrowserRouter>
     </div>
   );

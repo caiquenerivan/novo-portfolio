@@ -28,7 +28,7 @@ export default function Portfolio() {
   const handleCloseModal = () => setActiveWorkIndex(null);
 
   return (
-    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9 3xl:pl-96">
+    <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9 3xl:pl-96 z-10">
       <div className="flex flex-col px-8 py-4">
         <Tag>{"<h2>"}</Tag>
 
@@ -144,25 +144,25 @@ export default function Portfolio() {
                       isOpen={activeWorkIndex === index}
                       onClose={handleCloseModal}
                     >
-                      <div className="my-8 w-full h-full flex flex-col justify-center ">
+                      <div className="my-8 w-full h-full max-w-2xl flex flex-col justify-center ">
                         <h2
                           className={`${
                             language === "pt" ? "" : "hidden"
-                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:text-6xl mxl:py-4`}
+                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:py-4`}
                         >
                           {work.titlePt}
                         </h2>
                         <h2
                           className={`${
                             language === "en" ? "" : "hidden"
-                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:text-6xl mxl:py-4 `}
+                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:py-4 `}
                         >
                           {work.titleEn}
                         </h2>
 
                         <p
                           style={{ color: work.mainLanguage.colorHexa }}
-                          className={`my-1 josefin-slab-regular text-left text-sm sm:text-xl md:text-xl mxl:text-5xl`}
+                          className={`josefin-slab-regular text-left text-sm sm:text-xl md:text-xl mxl:text-5xl`}
                         >
                           {work.mainLanguage.name}
                         </p>
@@ -170,14 +170,14 @@ export default function Portfolio() {
                         <p
                           className={`${
                             language === "pt" ? "" : "hidden"
-                          } my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-xl mxl:text-3xl mxl:py-4`}
+                          } my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-lg mxl:py-4`}
                         >
                           {work.descriptionPt}
                         </p>
                         <p
                           className={`${
                             language === "en" ? "" : "hidden"
-                          } my-2 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-md md:text-xl mxl:text-3xl mxl:py-4`}
+                          } my-2 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-md md:text-lg mxl:py-4`}
                         >
                           {work.descriptionEn}
                         </p>
@@ -188,12 +188,15 @@ export default function Portfolio() {
                           {work.skills.map((skill, index) => (
                             <p
                               style={{ color: work.mainLanguage.colorHexa }}
-                              className="text-left my-2 mxl:text-4xl"
+                              className="text-left my-2 mxl:text-2xl"
                               key={index}
                             >
                               {skill.name}
                             </p>
                           ))}
+                        </div>
+                        <div className=" flex justify-center items-center w-full rounded-md">
+                          <img src={work.photo} alt={language === "en" ? work.titleEn : work.titlePt} className="w-48 rounded-md"/>
                         </div>
                         <div className="flex justify-center items-center mt-8 ">
                           <div

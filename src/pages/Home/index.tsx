@@ -6,7 +6,7 @@ export default function Home() {
   const { language } = useContext(LanguageContext);
 
   return (
-    <div className="flex flex-col h-screen w-full pl-16 justify-center max-w-screen-3xl  3xl:pl-96">
+    <div className="flex flex-col h-screen w-full pl-16 justify-center max-w-screen-3xl  3xl:pl-96 z-10">
       <Tag>{'<html>'}</Tag>
       <div className="px-4">
         <Tag>{'<body>'}</Tag>
