@@ -79,7 +79,7 @@ export default function Portfolio() {
                 <div
                   key={index}
                   style={{ borderColor: work.mainLanguage.colorHexa }}
-                  className={`py-8 min-w-60 max-w-80 h-50 mb-8  mx-2 border-t-4 rounded-sm shadow-lg p-4`}
+                  className={`py-8 bg-gray-700 min-w-60 max-w-80 h-50 mb-8  mx-2 border-t-4 rounded-sm shadow-lg p-4`}
                 >
                   <p
                     style={{ color: work.mainLanguage.colorHexa }}
@@ -120,24 +120,10 @@ export default function Portfolio() {
                       color: work.mainLanguage.colorHexa,
                       borderColor: work.mainLanguage.colorHexa,
                     }}
-                    className={`${
-                      language === "pt" ? "" : "hidden"
-                    } mt-4 border-2 p-2 rounded-2xl open-sans-regular text-left text-sm hover:bg-gray-600 sm:text-xl md:text-xl`}
+                    className={`mt-4 border-2 p-2 rounded-2xl open-sans-regular text-left text-sm hover:bg-gray-600 sm:text-xl md:text-xl`}
                     onClick={() => handleOpenModal(index)}
                   >
-                    Ver Mais
-                  </button>
-                  <button
-                    style={{
-                      color: work.mainLanguage.colorHexa,
-                      borderColor: work.mainLanguage.colorHexa,
-                    }}
-                    className={`${
-                      language === "en" ? "" : "hidden"
-                    } mt-4 border-2 p-2 rounded-2xl open-sans-regular text-left text-sm hover:bg-gray-200 sm:text-xl md:text-xl`}
-                    onClick={() => handleOpenModal(index)}
-                  >
-                    See More
+                    {language === "pt" ? "Ver Mais" : "See More"}
                   </button>
                   {activeWorkIndex === index && (
                     <Modal
@@ -162,7 +148,7 @@ export default function Portfolio() {
 
                         <p
                           style={{ color: work.mainLanguage.colorHexa }}
-                          className={`josefin-slab-regular text-left text-sm sm:text-xl md:text-xl mxl:text-5xl`}
+                          className={`josefin-slab-regular text-left text-sm uppercase sm:text-xl md:text-xl mxl:text-5xl`}
                         >
                           {work.mainLanguage.name}
                         </p>
@@ -188,7 +174,7 @@ export default function Portfolio() {
                           {work.skills.map((skill, index) => (
                             <p
                               style={{ color: work.mainLanguage.colorHexa }}
-                              className="text-left my-2 mxl:text-2xl"
+                              className="text-left my-2 mxl:text-2xl uppercase"
                               key={index}
                             >
                               {skill.name}
@@ -196,56 +182,44 @@ export default function Portfolio() {
                           ))}
                         </div>
                         <div className=" flex justify-center items-center w-full rounded-md">
-                          <img src={work.photo} alt={language === "en" ? work.titleEn : work.titlePt} className="w-48 rounded-md"/>
+                          <img
+                            src={work.photo}
+                            alt={
+                              language === "en" ? work.titleEn : work.titlePt
+                            }
+                            className="w-48 rounded-md"
+                          />
                         </div>
                         <div className="flex justify-center items-center mt-8 ">
                           <div
-                            className="rounded-xl border-2 w-24 flex justify-center items-center mx-2 hover:bg-gray-300 mxl:w-36"
+                            className="rounded-xl border-2 flex justify-center items-center mx-2 hover:bg-gray-600 mxl:w-36"
                             style={{ borderColor: work.mainLanguage.colorHexa }}
                           >
                             <a
                               href={work.linkGitHub}
                               style={{ color: work.mainLanguage.colorHexa }}
-                              className={`${
-                                language === "en" ? "" : "hidden"
-                              } text-left my-2 text-xs mxl:text-2xl`}
+                              className={`text-left m-2 text-xs mxl:text-2xl uppercase`}
                             >
-                              GitHub Link
-                            </a>
-                            <a
-                              href={work.linkGitHub}
-                              style={{ color: work.mainLanguage.colorHexa }}
-                              className={`${
-                                language === "pt" ? "" : "hidden"
-                              } text-left my-2 text-xs mxl:text-2xl`}
-                            >
-                              Link do GitHub
+                              {language === "pt"
+                                ? "Link do GitHub"
+                                : "GitHub Link"}
                             </a>
                           </div>
 
                           <div
                             className={`${
                               !work.linkProject ? "hidden" : ""
-                            } rounded-xl border-2 w-24 flex justify-center items-center mx-2 hover:bg-gray-300 mxl:w-36`}
+                            } rounded-xl border-2 flex justify-center items-center mx-2 hover:bg-gray-600 mxl:w-36`}
                             style={{ borderColor: work.mainLanguage.colorHexa }}
                           >
                             <a
                               href={work.linkProject}
                               style={{ color: work.mainLanguage.colorHexa }}
-                              className={`${
-                                language === "en" ? "" : "hidden"
-                              } text-left my-2 text-xs mxl:text-2xl`}
+                              className={`text-left m-2 text-xs mxl:text-2xl uppercase`}
                             >
-                              Project Link
-                            </a>
-                            <a
-                              href={work.linkProject}
-                              style={{ color: work.mainLanguage.colorHexa }}
-                              className={`${
-                                language === "pt" ? "" : "hidden"
-                              } text-left my-2 text-xs mxl:text-2xl`}
-                            >
-                              Link do Projeto
+                              {language === "pt"
+                                ? "Link do Projeto"
+                                : "Project Link"}
                             </a>
                           </div>
                         </div>
