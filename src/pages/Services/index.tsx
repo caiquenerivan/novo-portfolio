@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Title } from "../../components/Title";
 import { LanguageContext } from "../../context/LanguageContext";
 import { Tag } from "../../components/Tag";
-import { workType } from "../../data/worksType";
 import Carousel from "../../components/Carousel";
 
 const Services = () => {
@@ -65,7 +64,7 @@ const Services = () => {
         <Tag>{"</p>"}</Tag>
         <Tag>{"<section>"}</Tag>
 
-        <Carousel items={workType}/>
+        <Carousel />
 
         <Tag>{"</section>"}</Tag>
       </div>

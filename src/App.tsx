@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 //import Hobbies from "./pages/Hobbies";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Particulas } from "./components/Particulas";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
           {
             //<Route path="/hobbies" element={<Hobbies />} />
           }

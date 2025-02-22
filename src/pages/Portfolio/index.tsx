@@ -1,15 +1,18 @@
 import { useContext, useState } from "react";
 import { LanguageContext } from "../../context/LanguageContext";
-import works from "../../data/works";
 import Modal from "../../components/Modal";
 import { Title } from "../../components/Title";
 import { Tag } from "../../components/Tag";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import useWorks from "../../data/useWorks";
+import { skillsType } from "../../data/useSkills";
 
 export default function Portfolio() {
   const { language } = useContext(LanguageContext);
   const [activeWorkIndex, setActiveWorkIndex] = useState<number | null>(null);
   const [showCount, setShowCount] = useState<number>(3);
+
+  const { works, loading, error } = useWorks();
 
   const showMore = () => {
     setShowCount((prevCount) => prevCount + 3);
@@ -23,9 +26,30 @@ export default function Portfolio() {
     setShowCount((prevCount) => prevCount - 3);
     console.log(showCount);
   };
+  console.log();
+  
 
   const handleOpenModal = (index: number) => setActiveWorkIndex(index);
   const handleCloseModal = () => setActiveWorkIndex(null);
+
+  if (loading)
+    return (
+      <div
+        className={`flex justify-center items-center w-full h-full noWrap neon-red uppercase px-4 py-1 text-red-600 josefin-slab-regular text-left text-xs sm:text-sm md:text-md`}
+      >
+        {`${
+          language === "en" ? "Loading skils... " : "Carregando habilidades... "
+        }`}{" "}
+      </div>
+    );
+  if (error)
+    return (
+      <div
+        className={`noWrap neon-red uppercase px-4 py-1 text-red-600 josefin-slab-regular text-left text-xs sm:text-sm md:text-md`}
+      >
+        {`${language === "en" ? "Error: " : "Erro: "}`} {error}
+      </div>
+    );
 
   return (
     <div className="flex flex-col min-h-screen w-full pl-16 justify-center max-w-screen-3xl my-9 3xl:pl-96 z-10">
@@ -75,50 +99,37 @@ export default function Portfolio() {
         <div className="flex flex-col w-full justify-center items-center">
           <div className="flex py-4 flex-col lg:grid grid-cols-3">
             {works.slice(0, showCount).map((work, index) => {
+              const main_language = work.skills.find((skill: skillsType) => skill.skill_id === work.main_language_id); 
               return (
                 <div
                   key={index}
-                  style={{ borderColor: work.mainLanguage.colorHexa }}
+                  style={{ borderColor: main_language?.color_hexa }}
                   className={`py-8 bg-gray-700 min-w-60 max-w-80 h-50 mb-8  mx-2 border-t-4 rounded-sm shadow-lg p-4`}
                 >
                   <p
-                    style={{ color: work.mainLanguage.colorHexa }}
+                    style={{ color: main_language?.color_hexa }}
                     className={`my-1 uppercase josefin-slab-regular text-left text-sm sm:text-xl md:text-xl`}
                   >
-                    {work.mainLanguage.name}
+                    {main_language?.name}
                   </p>
                   <h2
-                    className={`${
-                      language === "pt" ? "line-clamp-1" : "hidden"
-                    } text-stone-300 londrina-solid-regular text-md text-left py-1 sm:text-xl md:text-5xl lg:text-2xl xl:text-3xl`}
+                    className={`line-clamp-1 text-stone-300 londrina-solid-regular text-md text-left py-1 sm:text-xl md:text-5xl lg:text-2xl xl:text-3xl`}
                   >
-                    {work.titlePt}
-                  </h2>
-                  <h2
-                    className={`${
-                      language === "en" ? "line-clamp-1" : "hidden"
-                    } text-stone-300 londrina-solid-regular text-md text-left py-1 sm:text-xl md:text-5xl lg:text-2xl xl:text-3xl`}
-                  >
-                    {work.titleEn}
+                    {`${language === "pt" ? work.title_pt : work.title_en}`}
                   </h2>
                   <p
-                    className={`${
-                      language === "pt" ? "line-clamp-2" : "hidden"
-                    } my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-xl`}
+                    className={`line-clamp-2 my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-xl`}
                   >
-                    {work.descriptionPt}
-                  </p>
-                  <p
-                    className={`${
-                      language === "en" ? "line-clamp-2" : "hidden"
-                    } my-2 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-md md:text-xl`}
-                  >
-                    {work.descriptionEn}
+                    {`${
+                      language === "pt"
+                        ? work.description_pt
+                        : work.description_en
+                    }`}
                   </p>
                   <button
                     style={{
-                      color: work.mainLanguage.colorHexa,
-                      borderColor: work.mainLanguage.colorHexa,
+                      color: main_language?.color_hexa,
+                      borderColor: main_language?.color_hexa,
                     }}
                     className={`mt-4 border-2 p-2 rounded-2xl open-sans-regular text-left text-sm hover:bg-gray-600 sm:text-xl md:text-xl`}
                     onClick={() => handleOpenModal(index)}
@@ -132,48 +143,34 @@ export default function Portfolio() {
                     >
                       <div className="my-8 w-full h-full max-w-2xl flex flex-col justify-center ">
                         <h2
-                          className={`${
-                            language === "pt" ? "" : "hidden"
-                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:py-4`}
+                          className={`text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:py-4`}
                         >
-                          {work.titlePt}
-                        </h2>
-                        <h2
-                          className={`${
-                            language === "en" ? "" : "hidden"
-                          } text-stone-300 londrina-solid-regular text-xl text-left py-1 my-2 sm:text-xl md:text-5xl lg:text-2xl mxl:py-4 `}
-                        >
-                          {work.titleEn}
+                          {`${
+                            language === "pt" ? work.title_pt : work.title_en
+                          }`}
                         </h2>
 
                         <p
-                          style={{ color: work.mainLanguage.colorHexa }}
+                          style={{ color: main_language?.color_hexa }}
                           className={`josefin-slab-regular text-left text-sm uppercase sm:text-xl md:text-xl mxl:text-5xl`}
                         >
-                          {work.mainLanguage.name}
+                          {main_language?.name}
                         </p>
 
                         <p
-                          className={`${
-                            language === "pt" ? "" : "hidden"
-                          } my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-lg mxl:py-4`}
+                          className={`my-1 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-xl md:text-lg mxl:py-4`}
                         >
-                          {work.descriptionPt}
-                        </p>
-                        <p
-                          className={`${
-                            language === "en" ? "" : "hidden"
-                          } my-2 twoLineText text-stone-300 open-sans-regular text-left text-sm sm:text-md md:text-lg mxl:py-4`}
-                        >
-                          {work.descriptionEn}
+                          {`${
+                            language === "pt" ? work.description_pt : work.description_en
+                          }`}
                         </p>
                         <div
-                          style={{ borderColor: work.mainLanguage.colorHexa }}
+                          style={{ borderColor: main_language?.color_hexa }}
                           className="flex justify-around border-t-2 w-full mt-4"
                         >
                           {work.skills.map((skill, index) => (
                             <p
-                              style={{ color: work.mainLanguage.colorHexa }}
+                              style={{ color: main_language?.color_hexa }}
                               className="text-left my-2 mxl:text-2xl uppercase"
                               key={index}
                             >
@@ -185,7 +182,7 @@ export default function Portfolio() {
                           <img
                             src={work.photo}
                             alt={
-                              language === "en" ? work.titleEn : work.titlePt
+                              language === "en" ? work.title_en : work.title_pt
                             }
                             className="w-48 rounded-md"
                           />
@@ -193,11 +190,13 @@ export default function Portfolio() {
                         <div className="flex justify-center items-center mt-8 ">
                           <div
                             className="rounded-xl border-2 flex justify-center items-center mx-2 hover:bg-gray-600 mxl:w-36"
-                            style={{ borderColor: work.mainLanguage.colorHexa }}
+                            style={{
+                              borderColor: main_language?.color_hexa,
+                            }}
                           >
                             <a
-                              href={work.linkGitHub}
-                              style={{ color: work.mainLanguage.colorHexa }}
+                              href={work.link_github}
+                              style={{ color: main_language?.color_hexa }}
                               className={`text-left m-2 text-xs mxl:text-2xl uppercase`}
                             >
                               {language === "pt"
@@ -208,13 +207,15 @@ export default function Portfolio() {
 
                           <div
                             className={`${
-                              !work.linkProject ? "hidden" : ""
+                              !work.link_project ? "hidden" : ""
                             } rounded-xl border-2 flex justify-center items-center mx-2 hover:bg-gray-600 mxl:w-36`}
-                            style={{ borderColor: work.mainLanguage.colorHexa }}
+                            style={{
+                              borderColor: main_language?.color_hexa,
+                            }}
                           >
                             <a
-                              href={work.linkProject}
-                              style={{ color: work.mainLanguage.colorHexa }}
+                              href={work.link_project}
+                              style={{ color: main_language?.color_hexa }}
                               className={`text-left m-2 text-xs mxl:text-2xl uppercase`}
                             >
                               {language === "pt"
