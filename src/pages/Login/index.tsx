@@ -4,14 +4,25 @@ import { Title } from "../../components/Title";
 import { useForm } from "react-hook-form";
 import { login } from "../../services/auth";
 import { AxiosError } from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth"; // Importe o contexto de autenticação
 
 interface FormLoginData {
   username: string;
   password: string;
 }
 
+interface LocationState {
+  from: {
+    pathname: string;
+  };
+}
+
 const Login = () => {
   const { language } = useContext(LanguageContext);
+  const { login: authLogin } = useAuth(); // Use o hook de autenticação
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
@@ -20,15 +31,30 @@ const Login = () => {
   } = useForm<FormLoginData>();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Obtenha a rota de origem ou use '/dashboard' como padrão
+  const from = (location.state as LocationState)?.from?.pathname || "/dashboard";
+
   const onSubmit = async (data: FormLoginData) => {
     try {
       const response = await login(data);
-
+      
+      // Armazene o token no localStorage
       localStorage.setItem("token", response.token);
-      alert("Login bem sucedido!");
+      
+      // Atualize o estado de autenticação
+      authLogin({
+        id: response.user.id, // Supondo que a resposta inclua dados do usuário
+        username: data.username
+      });
+
+      // Redirecione para a rota de origem
+      navigate(from, { replace: true });
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
-      setErrorMessage(axiosError.message || "Falha ao fazer login");
+      setErrorMessage(
+        axiosError.response?.data?.message || 
+        (language === "en" ? `Login failed ${axiosError}` : "Falha no login")
+      );
     }
   };
 
@@ -76,29 +102,18 @@ const Login = () => {
               })}
             />
             {errors.password && (
-              <p style={{ color: "red" }}>
-                {errors.password.message}
-              </p>
+              <p style={{ color: "red" }}>{errors.password.message}</p>
             )}
           </div>
           <button
             type="submit"
             className="my-2 border-2 border-teal-700 rounded-2xl hover:bg-teal-700 text-gray-700 lg:text-2xl lg:h-12 mxl:text-3xl"
           >
-            <p
-              className={`${
-                language === "en" ? "" : "hidden"
-              } uppercase text-teal-700 w-full px-4 py-1 hover:text-gray-700`}
+            <span
+              className={`uppercase text-teal-700 w-full px-4 py-1 hover:text-gray-700`}
             >
-              Send
-            </p>
-            <p
-              className={`${
-                language === "pt" ? "" : "hidden"
-              } uppercase text-teal-700 w-full px-4 py-1  hover:text-gray-700`}
-            >
-              Enviar
-            </p>
+              {`${language === "en" ? "Send" : "Enviar"} `}
+            </span>
           </button>
         </form>
       </div>

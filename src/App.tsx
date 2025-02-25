@@ -12,6 +12,9 @@ import Contact from "./pages/Contact";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Particulas } from "./components/Particulas";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AuthProvider } from "./providers/AuthProvider";
 
 function App() {
   return (
@@ -19,18 +22,23 @@ function App() {
       <BrowserRouter>
         <Sidebar />
         <SidebarMobile />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          {
-            //<Route path="/hobbies" element={<Hobbies />} />
-          }
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+            {
+              //<Route path="/hobbies" element={<Hobbies />} />
+            }
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </AuthProvider>
         <Particulas />
       </BrowserRouter>
     </div>
