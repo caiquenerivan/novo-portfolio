@@ -11,9 +11,6 @@ import Contact from "./pages/Contact";
 //import Hobbies from "./pages/Hobbies";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Particulas } from "./components/Particulas";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./providers/AuthProvider";
 
 function App() {
@@ -29,10 +26,10 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
+            {/*<Route path="/login" element={<Login />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
-            </Route>
+            </Route>*/}
             {
               //<Route path="/hobbies" element={<Hobbies />} />
             }
