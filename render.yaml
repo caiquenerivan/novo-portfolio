@@ -80,7 +80,6 @@ services:
     dockerContext: .
     plan: free
     region: oregon
-    healthCheckPath: /health
     envVars:
       - key: PORT
         value: "4001"
@@ -97,7 +96,6 @@ services:
     dockerContext: .
     plan: free
     region: oregon
-    healthCheckPath: /health
     envVars:
       - key: PORT
         value: "4002"
