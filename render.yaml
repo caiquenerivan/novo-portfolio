@@ -23,12 +23,15 @@
 #      (Render → nerivan-api-gateway → Settings → Custom Domain).
 #
 # info-service e blog-service são "web" (o plano free do Render não permite
-# Private Service). Eles têm URL pública, mas continuam protegidos pelo
-# INTERNAL_SECRET — qualquer request sem o header certo toma 403, mesmo vindo
-# de fora. Não é isolamento de rede de verdade (isso exigiria pserv, plano
-# pago), mas é a mesma barreira que já existia em dev. Se algum dia migrar
-# pra um plano pago, dá pra trocar "type: web" por "type: pserv" nesses dois
-# e tirar o healthCheckPath (pserv não aceita) pra ganhar isolamento de rede.
+# Private Service nem a rede interna privada — os dois são recurso de plano
+# pago). Isso significa que o gateway fala com eles pela URL pública normal
+# (https://nerivan-info-service-xxxx.onrender.com), não por um endereço
+# interno. Continuam protegidos pelo INTERNAL_SECRET — qualquer request sem
+# o header certo toma 403, de dentro ou de fora do Render — só que agora sem
+# isolamento de rede como camada extra. Se algum dia migrar pra um plano
+# pago, dá pra trocar "type: web" por "type: pserv" nesses dois, tirar o
+# healthCheckPath (pserv não aceita) e trocar "property: host" por
+# "property: hostport" no INFO_SERVICE_URL/BLOG_SERVICE_URL do gateway.
 
 services:
   # ─── API Gateway — roteia tudo, único ponto de entrada pro frontend ───────
@@ -60,12 +63,12 @@ services:
         fromService:
           type: web
           name: nerivan-info-service
-          property: hostport
+          property: host
       - key: BLOG_SERVICE_URL
         fromService:
           type: web
           name: nerivan-blog-service
-          property: hostport
+          property: host
       - key: ALLOWED_ORIGINS
         value: https://nerivan.site,https://www.nerivan.site
       - key: COOKIE_DOMAIN

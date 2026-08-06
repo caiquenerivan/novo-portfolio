@@ -23,10 +23,13 @@ if (!JWT_SECRET || !ADMIN_USER || !ADMIN_PASS_HASH || !INTERNAL_SECRET) {
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Serviços internos (Render "Private Service" expõe só "host:porta", sem
-// esquema — normaliza pra sempre ter um http:// na frente).
+// Serviços internos — se vier só o host (sem esquema), assume https, porque
+// no plano free do Render a comunicação entre serviços "web" vai pela URL
+// pública normal (a rede privada interna é recurso de plano pago, igual o
+// Private Service). Em dev local, INFO_SERVICE_URL/BLOG_SERVICE_URL já vêm
+// completos ("http://localhost:...") no .env, então isso nem entra em jogo.
 function normalizeServiceUrl(url: string): string {
-  return /^https?:\/\//i.test(url) ? url : `http://${url}`;
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
 }
 const INFO_SERVICE_URL = normalizeServiceUrl(process.env.INFO_SERVICE_URL || 'http://localhost:4001');
 const BLOG_SERVICE_URL = normalizeServiceUrl(process.env.BLOG_SERVICE_URL || 'http://localhost:4002');
