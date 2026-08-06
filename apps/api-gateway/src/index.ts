@@ -28,8 +28,13 @@ const PORT = process.env.PORT || 4000;
 // pública normal (a rede privada interna é recurso de plano pago, igual o
 // Private Service). Em dev local, INFO_SERVICE_URL/BLOG_SERVICE_URL já vêm
 // completos ("http://localhost:...") no .env, então isso nem entra em jogo.
+// O "property: host" do render.yaml devolve só o nome curto do serviço
+// (ex: "nerivan-info-service-lrh1"), sem o domínio — se não tem ponto
+// nenhum, completa com o sufixo padrão do Render.
 function normalizeServiceUrl(url: string): string {
-  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  if (/^https?:\/\//i.test(url)) return url;
+  const host = url.includes('.') ? url : `${url}.onrender.com`;
+  return `https://${host}`;
 }
 const INFO_SERVICE_URL = normalizeServiceUrl(process.env.INFO_SERVICE_URL || 'http://localhost:4001');
 const BLOG_SERVICE_URL = normalizeServiceUrl(process.env.BLOG_SERVICE_URL || 'http://localhost:4002');
