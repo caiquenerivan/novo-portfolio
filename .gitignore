@@ -24,3 +24,17 @@ dist-ssr
 *.sw?
 
 .env
+# Variáveis de ambiente — NUNCA commitar
+apps/**/.env
+apps/**/.env.local
+packages/**/.env
+
+# Cache local do Firebase CLI — não precisa ser versionado
+.firebase
+
+# "Banco de dados" local em JSON do info-service/blog-service — é estado de
+# runtime (gerado a partir do seed em src/db.ts na primeira execução), não
+# código-fonte. Não versionar evita diff gigante toda vez que alguém edita
+# algo pelo painel de admin.
+apps/info-service/data/
+apps/blog-service/data/
