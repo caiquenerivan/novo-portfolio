@@ -1,0 +1,74 @@
+# Sobe o backend inteiro (gateway + microsserviços + Postgres local) pra dev.
+# O frontend (apps/web) continua rodando fora do Docker via `npm run dev`.
+#
+#   docker compose up --build
+#
+# Por padrão usa um Postgres local (container "postgres") em vez do Neon —
+# mais rápido pra iterar sem depender de rede. Pra apontar pro Neon de
+# verdade, comente a variável DATABASE_URL de info-service/blog-service
+# abaixo e deixe o valor vir só do respectivo apps/*/.env.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: nerivan
+      POSTGRES_PASSWORD: nerivan
+      POSTGRES_DB: nerivan
+    ports:
+      - "5433:5432" # 5432 já pode estar em uso no host — acesso externo (psql) via 5433
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nerivan"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  info-service:
+    build:
+      context: .
+      dockerfile: apps/info-service/Dockerfile
+    env_file: apps/info-service/.env
+    environment:
+      # Sobrescreve o DATABASE_URL do .env — força usar o Postgres local do compose.
+      DATABASE_URL: postgres://nerivan:nerivan@postgres:5432/nerivan
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4001:4001"
+
+  blog-service:
+    build:
+      context: .
+      dockerfile: apps/blog-service/Dockerfile
+    env_file: apps/blog-service/.env
+    environment:
+      DATABASE_URL: postgres://nerivan:nerivan@postgres:5432/nerivan
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4002:4002"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+    # .env.docker (não .env) — o hash bcrypt de ADMIN_PASS_HASH tem "$", que o
+    # Compose tenta interpolar como variável; .env.docker já vem com "$$" escapado.
+    env_file: apps/api-gateway/.env.docker
+    environment:
+      # Dentro da rede do compose os serviços se enxergam pelo nome do serviço,
+      # não por localhost.
+      INFO_SERVICE_URL: http://info-service:4001
+      BLOG_SERVICE_URL: http://blog-service:4002
+    depends_on:
+      - info-service
+      - blog-service
+    ports:
+      - "4000:4000"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+**/dist
+**/data
+.git
+.github
+.vscode
+.idea
+**/.env
+**/.env.local
+*.log
+# Mantém apps/web/package.json (necessário pro "npm ci" na raiz resolver o
+# workspace) mas descarta o resto do frontend, que os Dockerfiles do backend
+# não usam.
+apps/web/src
+apps/web/public
+apps/web/dist

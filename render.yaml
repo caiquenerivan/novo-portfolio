@@ -1,11 +1,19 @@
 # Blueprint do Render para o backend (api-gateway + microsserviços).
 # O frontend (apps/web) NÃO entra aqui — continua na Vercel.
+# Deploy via Docker (Dockerfile de cada serviço), não pelo runtime Node nativo
+# do Render — mesma imagem que você builda e testa localmente com
+# `docker compose up`.
 #
 # Como usar:
 #   1. No Render, "New" → "Blueprint" → aponte pro repositório.
 #   2. Render lê este arquivo e cria os 3 serviços abaixo automaticamente.
 #   3. Preencha manualmente (Render vai pedir, por causa de "sync: false"):
 #        - api-gateway: ADMIN_USER, ADMIN_PASS_HASH
+#          (cole o hash bcrypt cru, sem escapar "$" — isso só é necessário
+#          no .env.docker do docker-compose local, não no dashboard do Render)
+#        - info-service: DATABASE_URL (connection string do Neon)
+#        - blog-service: DATABASE_URL (mesma do info-service, ou outra
+#          database do mesmo projeto Neon — os dois usam tabelas próprias)
 #      JWT_SECRET e INTERNAL_SECRET são gerados automaticamente pelo Render
 #      (generateValue/fromService) — não precisa mexer. Depois do primeiro
 #      deploy, vale conferir nas env vars dos 3 serviços se o INTERNAL_SECRET
@@ -14,8 +22,8 @@
 #   4. Aponte o DNS de api.nerivan.site pro serviço nerivan-api-gateway
 #      (Render → nerivan-api-gateway → Settings → Custom Domain).
 #   5. Planos "free" podem não estar disponíveis pra Private Service (pserv)
-#      na sua conta — se o Render reclamar, troque "plan: free" por
-#      "plan: starter" nos dois pserv abaixo.
+#      nem pra deploy via Docker na sua conta — se o Render reclamar, troque
+#      "plan: free" por "plan: starter" nos três serviços.
 #
 # info-service e blog-service são "pserv" (Private Service): não têm URL
 # pública, só são alcançáveis pela rede interna do Render — ninguém de fora
@@ -27,12 +35,11 @@ services:
   # ─── API Gateway — único serviço público ─────────────────────────────────
   - type: web
     name: nerivan-api-gateway
-    runtime: node
+    runtime: docker
+    dockerfilePath: ./apps/api-gateway/Dockerfile
+    dockerContext: .
     plan: free
     region: oregon
-    rootDir: .
-    buildCommand: npm install
-    startCommand: npm run start --workspace=apps/api-gateway
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -68,28 +75,28 @@ services:
   # ─── Info Service — privado, sem URL pública ─────────────────────────────
   - type: pserv
     name: nerivan-info-service
-    runtime: node
+    runtime: docker
+    dockerfilePath: ./apps/info-service/Dockerfile
+    dockerContext: .
     plan: free
     region: oregon
-    rootDir: .
-    buildCommand: npm install
-    startCommand: npm run start --workspace=apps/info-service
     healthCheckPath: /health
     envVars:
       - key: PORT
         value: "4001"
       - key: INTERNAL_SECRET
         generateValue: true
+      - key: DATABASE_URL
+        sync: false
 
   # ─── Blog Service — privado, sem URL pública ─────────────────────────────
   - type: pserv
     name: nerivan-blog-service
-    runtime: node
+    runtime: docker
+    dockerfilePath: ./apps/blog-service/Dockerfile
+    dockerContext: .
     plan: free
     region: oregon
-    rootDir: .
-    buildCommand: npm install
-    startCommand: npm run start --workspace=apps/blog-service
     healthCheckPath: /health
     envVars:
       - key: PORT
@@ -99,3 +106,5 @@ services:
           type: pserv
           name: nerivan-info-service
           envVarKey: INTERNAL_SECRET
+      - key: DATABASE_URL
+        sync: false

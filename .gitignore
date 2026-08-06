@@ -27,6 +27,7 @@ dist-ssr
 # Variáveis de ambiente — NUNCA commitar
 apps/**/.env
 apps/**/.env.local
+apps/**/.env.docker
 packages/**/.env
 
 # Cache local do Firebase CLI — não precisa ser versionado

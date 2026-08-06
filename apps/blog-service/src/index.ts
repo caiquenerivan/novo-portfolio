@@ -1,19 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { readDb, writeDb } from './db';
-import { BlogPost } from '@portfolio/shared-types';
-
-// ─── Whitelist de campos editáveis — evita mass assignment via req.body ────
-function pick<T extends object>(source: any, keys: readonly (keyof T)[]): Partial<T> {
-  const result: Partial<T> = {};
-  for (const key of keys) {
-    if (source[key] !== undefined) result[key] = source[key];
-  }
-  return result;
-}
-
-const POST_FIELDS = ['slug', 'title', 'summary', 'content', 'coverImage', 'published', 'tags'] as const;
+import * as db from './db';
 
 // ─── Validação de variáveis de ambiente obrigatórias ───────────────────────
 const INTERNAL_SECRET = process.env.INTERNAL_SECRET;
@@ -37,93 +25,56 @@ function requireInternalSecret(req: express.Request, res: express.Response, next
   next();
 }
 
-app.use(requireInternalSecret);
-
-// ─── Health check ──────────────────────────────────────────────────────────
+// ─── Health check — antes do middleware de secret, de propósito ────────────
+// Não expõe nada sensível (só "estou de pé"), e precisa ser público pro
+// health check do Docker/Render (que não manda o x-internal-secret) conseguir bater aqui.
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'blog-service', timestamp: new Date().toISOString() });
 });
 
+app.use(requireInternalSecret);
+
 // ─── Admin — lista todos os posts, incluindo rascunhos ─────────────────────
-// Protegido pelo x-internal-secret (como todo o resto deste serviço) + pelo
-// gateway, que exige JWT de admin antes de encaminhar pra cá.
-app.get('/admin/posts', (_req, res) => {
-  const db = readDb();
-  res.json(db.posts);
+app.get('/admin/posts', async (_req, res) => {
+  res.json(await db.getAllPosts());
 });
 
 // ─── Blog endpoints ────────────────────────────────────────────────────────
-app.get('/posts', (req, res) => {
-  const db = readDb();
-  let posts = db.posts.filter(p => p.published);
-
-  if (req.query.tag) {
-    const tag = String(req.query.tag).toLowerCase();
-    posts = posts.filter(p => p.tags.some(t => t.toLowerCase() === tag));
-  }
-
-  if (req.query.search) {
-    const q = String(req.query.search).toLowerCase();
-    posts = posts.filter(p => p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q));
-  }
-
-  res.json(posts);
+app.get('/posts', async (req, res) => {
+  const tag = req.query.tag ? String(req.query.tag) : undefined;
+  const search = req.query.search ? String(req.query.search) : undefined;
+  res.json(await db.getPublishedPosts({ tag, search }));
 });
 
-app.get('/posts/:slugOrId', (req, res) => {
-  const db = readDb();
-  const { slugOrId } = req.params;
-  const post = db.posts.find(p => (p.slug === slugOrId || p.id === slugOrId) && p.published);
+app.get('/posts/:slugOrId', async (req, res) => {
+  const post = await db.getPublishedPostBySlugOrId(req.params.slugOrId);
   if (!post) return res.status(404).json({ error: 'Artigo não encontrado' });
   res.json(post);
 });
 
-app.post('/posts', (req, res) => {
-  const db = readDb();
-  const title = req.body.title || 'Novo Artigo';
-  const slug = req.body.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-
-  const newPost: BlogPost = {
-    id: Date.now().toString(),
-    slug,
-    title,
-    summary: req.body.summary || '',
-    content: req.body.content || '',
-    coverImage: req.body.coverImage || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop',
-    publishedAt: new Date().toISOString(),
-    published: req.body.published ?? true,
-    tags: Array.isArray(req.body.tags) ? req.body.tags : [],
-    readTimeMinutes: Math.max(1, Math.ceil((req.body.content || '').split(' ').length / 200))
-  };
-
-  db.posts.unshift(newPost);
-  writeDb(db);
-  res.status(201).json(newPost);
+app.post('/posts', async (req, res) => {
+  res.status(201).json(await db.createPost(req.body));
 });
 
-app.put('/posts/:id', (req, res) => {
-  const db = readDb();
-  const idx = db.posts.findIndex(p => p.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Artigo não encontrado' });
-
-  const updates = pick<BlogPost>(req.body, POST_FIELDS);
-  if (updates.content) {
-    updates.readTimeMinutes = Math.max(1, Math.ceil(updates.content.split(' ').length / 200));
-  }
-
-  db.posts[idx] = { ...db.posts[idx], ...updates };
-  writeDb(db);
-  res.json(db.posts[idx]);
+app.put('/posts/:id', async (req, res) => {
+  const updated = await db.updatePost(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Artigo não encontrado' });
+  res.json(updated);
 });
 
-app.delete('/posts/:id', (req, res) => {
-  const db = readDb();
-  db.posts = db.posts.filter(p => p.id !== req.params.id);
-  writeDb(db);
+app.delete('/posts/:id', async (req, res) => {
+  await db.deletePost(req.params.id);
   res.json({ success: true, message: 'Artigo removido com sucesso' });
 });
 
 // ─── Start ─────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`[Blog Service] Rodando na porta ${PORT}`);
-});
+db.initDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`[Blog Service] Rodando na porta ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('[FATAL] Falha ao inicializar o banco de dados:', err);
+    process.exit(1);
+  });

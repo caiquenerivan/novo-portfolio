@@ -1,20 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { readDb, writeDb } from './db';
-import { Profile, Project, Skill, Experience, ContactMessage } from '@portfolio/shared-types';
-
-// ─── Whitelist de campos editáveis — evita mass assignment via req.body ────
-function pick<T extends object>(source: any, keys: readonly (keyof T)[]): Partial<T> {
-  const result: Partial<T> = {};
-  for (const key of keys) {
-    if (source[key] !== undefined) result[key] = source[key];
-  }
-  return result;
-}
-
-const PROFILE_FIELDS = ['name', 'title', 'bio', 'about', 'avatarUrl', 'email', 'githubUrl', 'linkedinUrl', 'location', 'availableForHire'] as const;
-const PROJECT_FIELDS = ['title', 'description', 'longDescription', 'imageUrl', 'tags', 'githubUrl', 'liveUrl', 'featured'] as const;
+import * as db from './db';
 
 // ─── Validação de variáveis de ambiente obrigatórias ───────────────────────
 const INTERNAL_SECRET = process.env.INTERNAL_SECRET;
@@ -38,182 +25,121 @@ function requireInternalSecret(req: express.Request, res: express.Response, next
   next();
 }
 
-app.use(requireInternalSecret);
-
-// ─── Health check ──────────────────────────────────────────────────────────
+// ─── Health check — antes do middleware de secret, de propósito ────────────
+// Não expõe nada sensível (só "estou de pé"), e precisa ser público pro
+// health check do Docker/Render (que não manda o x-internal-secret) conseguir bater aqui.
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'info-service', timestamp: new Date().toISOString() });
 });
 
+app.use(requireInternalSecret);
+
 // ─── Profile endpoints ─────────────────────────────────────────────────────
-app.get('/profile', (_req, res) => {
-  const db = readDb();
-  res.json(db.profile);
+app.get('/profile', async (_req, res) => {
+  res.json(await db.getProfile());
 });
 
-app.put('/profile', (req, res) => {
-  const db = readDb();
-  db.profile = { ...db.profile, ...pick<Profile>(req.body, PROFILE_FIELDS) };
-  writeDb(db);
-  res.json(db.profile);
+app.put('/profile', async (req, res) => {
+  res.json(await db.updateProfile(req.body));
 });
 
 // ─── Projects endpoints ────────────────────────────────────────────────────
-app.get('/projects', (_req, res) => {
-  const db = readDb();
-  res.json(db.projects);
+app.get('/projects', async (_req, res) => {
+  res.json(await db.getProjects());
 });
 
-app.post('/projects', (req, res) => {
-  const db = readDb();
-  const newProject: Project = {
-    id: Date.now().toString(),
-    title: req.body.title || 'Novo Projeto',
-    description: req.body.description || '',
-    longDescription: req.body.longDescription || '',
-    imageUrl: req.body.imageUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop',
-    tags: Array.isArray(req.body.tags) ? req.body.tags : [],
-    githubUrl: req.body.githubUrl || '',
-    liveUrl: req.body.liveUrl || '',
-    featured: req.body.featured || false,
-    createdAt: new Date().toISOString()
-  };
-  db.projects.unshift(newProject);
-  writeDb(db);
-  res.status(201).json(newProject);
+app.post('/projects', async (req, res) => {
+  res.status(201).json(await db.createProject(req.body));
 });
 
-app.put('/projects/:id', (req, res) => {
-  const db = readDb();
-  const idx = db.projects.findIndex(p => p.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Projeto não encontrado' });
-  db.projects[idx] = { ...db.projects[idx], ...pick<Project>(req.body, PROJECT_FIELDS) };
-  writeDb(db);
-  res.json(db.projects[idx]);
+app.put('/projects/:id', async (req, res) => {
+  const updated = await db.updateProject(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Projeto não encontrado' });
+  res.json(updated);
 });
 
-app.delete('/projects/:id', (req, res) => {
-  const db = readDb();
-  db.projects = db.projects.filter(p => p.id !== req.params.id);
-  writeDb(db);
+app.delete('/projects/:id', async (req, res) => {
+  await db.deleteProject(req.params.id);
   res.json({ success: true, message: 'Projeto removido com sucesso' });
 });
 
 // ─── Skills endpoints ──────────────────────────────────────────────────────
-app.get('/skills', (_req, res) => {
-  const db = readDb();
-  res.json(db.skills);
+app.get('/skills', async (_req, res) => {
+  res.json(await db.getSkills());
 });
 
-app.post('/skills', (req, res) => {
-  const db = readDb();
-  const newSkill: Skill = {
-    id: Date.now().toString(),
-    name: req.body.name || 'Nova Habilidade',
-    category: req.body.category || 'frontend',
-    level: req.body.level || 80
-  };
-  db.skills.push(newSkill);
-  writeDb(db);
-  res.status(201).json(newSkill);
+app.post('/skills', async (req, res) => {
+  res.status(201).json(await db.createSkill(req.body));
 });
 
-app.delete('/skills/:id', (req, res) => {
-  const db = readDb();
-  db.skills = db.skills.filter(s => s.id !== req.params.id);
-  writeDb(db);
+app.delete('/skills/:id', async (req, res) => {
+  await db.deleteSkill(req.params.id);
   res.json({ success: true });
 });
 
 // ─── Experiences endpoints ─────────────────────────────────────────────────
-app.get('/experiences', (_req, res) => {
-  const db = readDb();
-  res.json(db.experiences);
+app.get('/experiences', async (_req, res) => {
+  res.json(await db.getExperiences());
 });
 
-app.post('/experiences', (req, res) => {
-  const db = readDb();
-  const newExp: Experience = {
-    id: Date.now().toString(),
-    role: req.body.role || '',
-    company: req.body.company || '',
-    period: req.body.period || '',
-    description: req.body.description || '',
-    technologies: Array.isArray(req.body.technologies) ? req.body.technologies : []
-  };
-  db.experiences.unshift(newExp);
-  writeDb(db);
-  res.status(201).json(newExp);
+app.post('/experiences', async (req, res) => {
+  res.status(201).json(await db.createExperience(req.body));
 });
 
-app.delete('/experiences/:id', (req, res) => {
-  const db = readDb();
-  db.experiences = db.experiences.filter(e => e.id !== req.params.id);
-  writeDb(db);
+app.delete('/experiences/:id', async (req, res) => {
+  await db.deleteExperience(req.params.id);
   res.json({ success: true });
 });
 
 // ─── Contact endpoint ──────────────────────────────────────────────────────
-app.get('/contact', (_req, res) => {
-  const db = readDb();
-  res.json(db.messages);
+app.get('/contact', async (_req, res) => {
+  res.json(await db.getMessages());
 });
 
-app.post('/contact', (req, res) => {
+app.post('/contact', async (req, res) => {
   const { name, email, subject, message } = req.body;
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Campos name, email e message são obrigatórios.' });
   }
-  const db = readDb();
-  const newMessage: ContactMessage = {
-    id: Date.now().toString(),
-    name: String(name).slice(0, 100),
-    email: String(email).slice(0, 200),
-    subject: String(subject || 'Mensagem do Portfólio').slice(0, 200),
-    message: String(message).slice(0, 2000),
-    createdAt: new Date().toISOString(),
-    read: false
-  };
-  db.messages.unshift(newMessage);
-  writeDb(db);
+  await db.createMessage({ name: String(name), email: String(email), subject: String(subject || ''), message: String(message) });
   res.status(201).json({ success: true, message: 'Mensagem enviada com sucesso!' });
 });
 
-app.put('/contact/:id', (req, res) => {
-  const db = readDb();
-  const idx = db.messages.findIndex(m => m.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Mensagem não encontrada' });
-  if (typeof req.body.read === 'boolean') {
-    db.messages[idx].read = req.body.read;
+app.put('/contact/:id', async (req, res) => {
+  if (typeof req.body.read !== 'boolean') {
+    return res.status(400).json({ error: 'Campo "read" (boolean) é obrigatório.' });
   }
-  writeDb(db);
-  res.json(db.messages[idx]);
+  const updated = await db.updateMessageRead(req.params.id, req.body.read);
+  if (!updated) return res.status(404).json({ error: 'Mensagem não encontrada' });
+  res.json(updated);
 });
 
-app.delete('/contact/:id', (req, res) => {
-  const db = readDb();
-  db.messages = db.messages.filter(m => m.id !== req.params.id);
-  writeDb(db);
+app.delete('/contact/:id', async (req, res) => {
+  await db.deleteMessage(req.params.id);
   res.json({ success: true });
 });
 
 // ─── Legacy endpoints ──────────────────────────────────────────────────────
-app.get('/users/username/:username', (_req, res) => {
-  const db = readDb();
-  res.json(db.legacyUser);
+app.get('/users/username/:username', async (_req, res) => {
+  res.json(await db.getLegacyUser());
 });
 
-app.get('/works', (_req, res) => {
-  const db = readDb();
-  res.json(db.legacyWorks);
+app.get('/works', async (_req, res) => {
+  res.json(await db.getLegacyWorks());
 });
 
-app.get('/work-types', (_req, res) => {
-  const db = readDb();
-  res.json(db.legacyWorkTypes);
+app.get('/work-types', async (_req, res) => {
+  res.json(await db.getLegacyWorkTypes());
 });
 
 // ─── Start ─────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`[Info Service] Rodando na porta ${PORT}`);
-});
+db.initDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`[Info Service] Rodando na porta ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('[FATAL] Falha ao inicializar o banco de dados:', err);
+    process.exit(1);
+  });
