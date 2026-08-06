@@ -21,18 +21,17 @@
 #      copie o valor gerado em nerivan-info-service pros outros dois na mão.
 #   4. Aponte o DNS de api.nerivan.site pro serviço nerivan-api-gateway
 #      (Render → nerivan-api-gateway → Settings → Custom Domain).
-#   5. Planos "free" podem não estar disponíveis pra Private Service (pserv)
-#      nem pra deploy via Docker na sua conta — se o Render reclamar, troque
-#      "plan: free" por "plan: starter" nos três serviços.
 #
-# info-service e blog-service são "pserv" (Private Service): não têm URL
-# pública, só são alcançáveis pela rede interna do Render — ninguém de fora
-# consegue bater neles diretamente, nem com o INTERNAL_SECRET. Só o gateway
-# enxerga os dois, exatamente como em dev (onde o INTERNAL_SECRET já era a
-# única barreira). Isso é uma camada a mais de isolamento de rede.
+# info-service e blog-service são "web" (o plano free do Render não permite
+# Private Service). Eles têm URL pública, mas continuam protegidos pelo
+# INTERNAL_SECRET — qualquer request sem o header certo toma 403, mesmo vindo
+# de fora. Não é isolamento de rede de verdade (isso exigiria pserv, plano
+# pago), mas é a mesma barreira que já existia em dev. Se algum dia migrar
+# pra um plano pago, dá pra trocar "type: web" por "type: pserv" nesses dois
+# e tirar o healthCheckPath (pserv não aceita) pra ganhar isolamento de rede.
 
 services:
-  # ─── API Gateway — único serviço público ─────────────────────────────────
+  # ─── API Gateway — roteia tudo, único ponto de entrada pro frontend ───────
   - type: web
     name: nerivan-api-gateway
     runtime: docker
@@ -54,17 +53,17 @@ services:
         sync: false
       - key: INTERNAL_SECRET
         fromService:
-          type: pserv
+          type: web
           name: nerivan-info-service
           envVarKey: INTERNAL_SECRET
       - key: INFO_SERVICE_URL
         fromService:
-          type: pserv
+          type: web
           name: nerivan-info-service
           property: hostport
       - key: BLOG_SERVICE_URL
         fromService:
-          type: pserv
+          type: web
           name: nerivan-blog-service
           property: hostport
       - key: ALLOWED_ORIGINS
@@ -72,14 +71,15 @@ services:
       - key: COOKIE_DOMAIN
         value: .nerivan.site
 
-  # ─── Info Service — privado, sem URL pública ─────────────────────────────
-  - type: pserv
+  # ─── Info Service — protegido pelo INTERNAL_SECRET, não pra ser usado direto ──
+  - type: web
     name: nerivan-info-service
     runtime: docker
     dockerfilePath: ./apps/info-service/Dockerfile
     dockerContext: .
     plan: free
     region: oregon
+    healthCheckPath: /health
     envVars:
       - key: PORT
         value: "4001"
@@ -88,20 +88,21 @@ services:
       - key: DATABASE_URL
         sync: false
 
-  # ─── Blog Service — privado, sem URL pública ─────────────────────────────
-  - type: pserv
+  # ─── Blog Service — protegido pelo INTERNAL_SECRET, não pra ser usado direto ──
+  - type: web
     name: nerivan-blog-service
     runtime: docker
     dockerfilePath: ./apps/blog-service/Dockerfile
     dockerContext: .
     plan: free
     region: oregon
+    healthCheckPath: /health
     envVars:
       - key: PORT
         value: "4002"
       - key: INTERNAL_SECRET
         fromService:
-          type: pserv
+          type: web
           name: nerivan-info-service
           envVarKey: INTERNAL_SECRET
       - key: DATABASE_URL
