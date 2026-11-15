@@ -1,0 +1,191 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import SideNav from '../components/SideNav.astro';
+import { SITE, prefix, ui, type Lang } from '../i18n';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Caminho desta página sem o prefixo de idioma (ex.: "/blog/"). Vazio = sem versão no outro idioma. */
+  path?: string;
+  home?: boolean;
+  current?: string;
+  /** Dados estruturados extras (JSON-LD) da página. */
+  jsonLd?: Record<string, unknown>;
+  ogType?: 'website' | 'article';
+}
+
+const { lang, title, description, path, home = false, current, jsonLd, ogType = 'website' } = Astro.props;
+const t = ui[lang];
+const other: Lang = lang === 'pt' ? 'en' : 'pt';
+
+const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${t.kicker.split(' · ')[0]}`;
+const pageDescription = description ?? t.siteDescription;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const url = (l: Lang) => new URL(`${prefix(l)}${path}`, Astro.site).href;
+const otherHref = path !== undefined ? `${prefix(other)}${path}` : `${prefix(other)}/`;
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    {
+      path !== undefined && (
+        <>
+          <link rel="alternate" hreflang="pt-BR" href={url('pt')} />
+          <link rel="alternate" hreflang="en" href={url('en')} />
+          <link rel="alternate" hreflang="x-default" href={url('en')} />
+        </>
+      )
+    }
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · Blog`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#2b2b33" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="blobs" aria-hidden="true">
+      <div class="blob b1"><i></i></div>
+      <div class="blob b2"><i></i></div>
+      <div class="blob b3"><i></i></div>
+    </div>
+
+    <div class="page">
+      <header class="top">
+        <a href={`${prefix(lang)}/`} class="logo" aria-label={SITE.name}>CN</a>
+        <div class="langs">
+          <a href={lang === 'pt' ? Astro.url.pathname : otherHref} aria-current={lang === 'pt' ? 'true' : undefined} lang="pt-BR">PT</a>
+          <a href={lang === 'en' ? Astro.url.pathname : otherHref} aria-current={lang === 'en' ? 'true' : undefined} lang="en">EN</a>
+        </div>
+      </header>
+      <slot />
+    </div>
+
+    <SideNav lang={lang} home={home} current={current} />
+
+    <script>
+      import '../scripts/motion.ts';
+    </script>
+  </body>
+</html>
+
+<style>
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    padding: 10px 0;
+  }
+  .langs {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+  .langs a {
+    padding: 12px 8px;
+    color: var(--muted);
+  }
+  .langs a[aria-current] {
+    color: var(--accent);
+  }
+
+  /* Formas 3D do fundo: flutuam devagar e se deslocam com o mouse. */
+  .blobs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    --mx: 0;
+    --my: 0;
+  }
+  .blob {
+    position: absolute;
+    transform: translate(calc(var(--mx) * var(--depth) * 1px), calc(var(--my) * var(--depth) * 1px));
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .blob i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #41414d, #25252c 68%);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+    animation: float 14s ease-in-out infinite alternate;
+  }
+  .b1 {
+    --depth: -60;
+    top: -140px;
+    left: -120px;
+    width: 460px;
+    height: 460px;
+  }
+  .b2 {
+    --depth: 110;
+    top: 42vh;
+    left: 46%;
+    width: 150px;
+    height: 150px;
+  }
+  .b2 i {
+    animation-duration: 9s;
+    animation-delay: -4s;
+  }
+  .b3 {
+    --depth: -90;
+    top: 48vh;
+    right: -160px;
+    width: 520px;
+    height: 520px;
+  }
+  .b3 i {
+    animation-duration: 18s;
+    animation-delay: -7s;
+  }
+  @keyframes float {
+    from {
+      transform: translate3d(0, -18px, 0) scale(1);
+    }
+    to {
+      transform: translate3d(14px, 22px, 0) scale(1.05);
+    }
+  }
+  @media (max-width: 900px) {
+    .b1 {
+      width: 300px;
+      height: 300px;
+    }
+    .b3 {
+      width: 320px;
+      height: 320px;
+    }
+  }
+</style>

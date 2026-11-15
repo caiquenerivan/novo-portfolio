@@ -1,0 +1,199 @@
+@import '@fontsource-variable/unbounded';
+@import '@fontsource-variable/hanken-grotesk';
+
+:root {
+  --bg: #2b2b33;
+  --surface: #32323c;
+  --line: #44444f;
+  --line-strong: #6d7191;
+  --text: #f3f2f9;
+  --text-soft: #d5d6e4;
+  --muted: #aab2d1;
+  --accent: #b9a8ff;
+  --display: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
+  --body: 'Hanken Grotesk Variable', 'Hanken Grotesk', system-ui, sans-serif;
+  --nav-w: 190px;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 48px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Granulado: ruído SVG em mosaico, fixo sobre a página inteira. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.28;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--accent);
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.display {
+  font-family: var(--display);
+  text-transform: uppercase;
+}
+.label {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.accent {
+  color: var(--accent);
+}
+
+/* Links com seta que anda no hover. */
+.arrow {
+  display: inline-flex;
+  gap: 0.5em;
+  padding: 10px 0;
+  font-weight: 500;
+}
+.arrow::before {
+  content: '→';
+  transition: transform 0.25s;
+}
+.arrow:hover::before {
+  transform: translateX(5px);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px calc(var(--nav-w) + 24px) 96px 64px;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.section-head h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+.section-head span {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+/* Linha de post, usada na home e na lista do blog. */
+.post-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-top: 1px solid var(--line-strong);
+}
+.post-row:last-of-type {
+  border-bottom: 1px solid var(--line-strong);
+}
+.post-row .date {
+  flex: 0 0 150px;
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.post-row .title {
+  flex: 1 1 320px;
+  font-size: 21px;
+  font-weight: 500;
+  transition: transform 0.25s;
+}
+.post-row:hover .title {
+  transform: translateX(8px);
+}
+.post-row .meta {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Entrada das seções ao rolar. Só esconde quando há JS para revelar. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--d, 0) * 90ms);
+}
+.js [data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 28px 22px 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

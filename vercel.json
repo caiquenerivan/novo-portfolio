@@ -1,8 +1,5 @@
 {
-  "buildCommand": "npm run build --workspace=apps/web",
-  "installCommand": "npm install",
-  "outputDirectory": "apps/web/dist",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "installCommand": "npm install --prefix site",
+  "buildCommand": "npm run build --prefix site",
+  "outputDirectory": "site/dist"
 }
