@@ -1,0 +1,19 @@
+---
+import { formatDate, prefix, readingTime, ui, type Lang } from '../i18n';
+import type { Post } from '../posts';
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+const { post, lang } = Astro.props;
+---
+
+<a class="post-row" href={`${prefix(lang)}/blog/${post.slug}/`} data-reveal>
+  <time class="date" datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
+  <span class="title">{post.data.title}</span>
+  <span class="meta">
+    {post.data.tags[0] && `${post.data.tags[0]} · `}{readingTime(post.body)}
+    {ui[lang].minutes}
+  </span>
+</a>

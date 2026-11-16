@@ -1,0 +1,5 @@
+[
+  { "group": { "pt": "Frontend", "en": "Frontend" }, "items": ["TypeScript", "React", "Next.js", "TailwindCSS"] },
+  { "group": { "pt": "Backend", "en": "Backend" }, "items": ["Node.js", "Express", "REST APIs", "Microsserviços"] },
+  { "group": { "pt": "Dados e DevOps", "en": "Data & DevOps" }, "items": ["PostgreSQL", "SQLite", "Docker", "Linux"] }
+]

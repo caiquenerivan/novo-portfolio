@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import PostRow from './PostRow.astro';
+import { ui, type Lang } from '../i18n';
+import { getPosts } from '../posts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang];
+const posts = await getPosts(lang);
+---
+
+<Base lang={lang} title={t.blogTitle} description={t.blogDescription} path="/blog/" current="blog">
+  <main>
+    <header>
+      <h1 class="display">{t.blogTitle}</h1>
+      <p>{t.blogDescription}</p>
+    </header>
+    <div>
+      {posts.map((post) => <PostRow post={post} lang={lang} />)}
+      {posts.length === 0 && <p class="empty">{t.noPosts}</p>}
+    </div>
+  </main>
+</Base>
+
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    padding-top: 120px;
+    min-height: 80vh;
+  }
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  h1 {
+    font-weight: 800;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.05;
+  }
+  header p {
+    max-width: 560px;
+    font-size: 19px;
+    color: var(--text-soft);
+  }
+  .empty {
+    color: var(--muted);
+  }
+</style>

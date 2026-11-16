@@ -1,0 +1,105 @@
+---
+import { prefix, ui, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** Na home os links rolam a página; fora dela, voltam para a home na seção certa. */
+  home?: boolean;
+  /** Item marcado como atual fora da home (ex.: "blog" nas páginas do blog). */
+  current?: string;
+}
+
+const { lang, home = false, current } = Astro.props;
+const t = ui[lang];
+const base = `${prefix(lang)}/`;
+
+const items = [
+  { id: 'inicio', label: t.nav.home },
+  { id: 'projetos', label: t.nav.projects },
+  { id: 'skills', label: t.nav.skills },
+  { id: 'blog', label: t.nav.blog },
+  { id: 'contato', label: t.nav.contact },
+];
+---
+
+<nav class="sidenav" aria-label={t.navLabel}>
+  {
+    items.map((item, i) => (
+      <a
+        href={home ? `#${item.id}` : `${base}#${item.id}`}
+        data-spy={home ? item.id : undefined}
+        aria-current={(home ? i === 0 : current === item.id) ? 'true' : undefined}
+      >
+        {item.label}
+        <span class="dot" aria-hidden="true" />
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .sidenav {
+    position: fixed;
+    z-index: 10;
+    top: 50%;
+    right: 48px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    color: var(--muted);
+  }
+  a:hover,
+  a[aria-current] {
+    color: var(--accent);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    transform: scale(0.5);
+    transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  a:hover .dot,
+  a[aria-current] .dot {
+    transform: scale(1);
+  }
+
+  /* No celular o menu vira uma barra fixa embaixo. */
+  @media (max-width: 900px) {
+    .sidenav {
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: none;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      gap: 0;
+      padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      background: rgba(43, 43, 51, 0.88);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+    }
+    a {
+      padding: 16px 4px;
+    }
+    .dot {
+      display: none;
+    }
+  }
+</style>
