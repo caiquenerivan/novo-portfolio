@@ -6,5 +6,6 @@ description:
   en: Music theory and ear training for guitar and piano in the browser, with a tuner and chords pulled from songs.
 stack: [React, TypeScript, Web Audio]
 github: https://github.com/caiquenerivan/intervalo
+live: https://caiquenerivan.github.io/intervalo/
 image: /projects/intervalo.jpg
 ---
